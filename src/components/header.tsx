@@ -1,17 +1,14 @@
+"use client"
+
 import { Button } from "./ui/button"
 import { ChevronDown } from "lucide-react"
-import LogoBlue from "./incons/logo-blue"
-import DayThemeLogo from "./incons/day-theme-logo"
-import SearchIcon from "./incons/search-icon"
+import LogoBlue from "./icons/logo-blue"
+import DayThemeLogo from "./icons/day-theme-logo"
+import SearchIcon from "./icons/search-icon"
 
-export const Header = () => {
- 
-    // const handleClickOnGenre = () => {
-    //      <div className="w-500px h-200px bg-black-500"> </div>
-    // }
-
+export const Header = ({ onClick }) => {
     return (
-        <div className="w-screen h-[60px] flex justify-between pt-[5px]">
+        <div className={`w-[1280px] h-[60px] flex justify-between pt-[5px] } `}>
             <LogoBlue />
             <div className="w-[500px] h-[35px] flex gap-[10px] ">
                 
@@ -22,7 +19,11 @@ export const Header = () => {
                 </div>
                 
             </div>
-            <Button className="bg-transparen border w-[35px] h-[35px]"> <DayThemeLogo /></Button>
+            <Button 
+            onClick={onClick} 
+            className="bg-transparent border w-[35px] h-[35px]">
+                <DayThemeLogo />
+            </Button>
         </div>
     )
 }

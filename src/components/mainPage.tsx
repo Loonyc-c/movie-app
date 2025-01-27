@@ -1,23 +1,32 @@
+"use client"
+
 import { Header } from "./header"
-import { PopularMovieSlider } from "./popular-movie-slider"
+import { NowPlayingMovies } from "./now-playing-movie.tsx"
 import { UpcomingMoviesList } from "./upcoming-movies-list"
 import { PopularMovieList } from "./popular-movie-list"
 import { TopRatedMovieList } from "./top-movie-list"
+import { Footer } from "./footer"
+import { useState } from "react"
 
-export const MainPage = ()=> {
-     const moviesApiKey = "1f25dddf1c81350b49714e3329104a98"
-     
+export const MainPage = () => {
+        const [dayTheme, setDayTheme] = useState(true); 
+    
+        const handleThemeChange = () => {
+            setDayTheme((prevTheme) => !prevTheme); 
+        };
 
     return (
-    <div> 
-        <Header />  
-        <PopularMovieSlider />
-        <UpcomingMoviesList />
-        <PopularMovieList />
-        <TopRatedMovieList />
+        <div className={`w-screen h-full gap-[20px] flex flex-col items-center ${dayTheme ? "bg-white" : "bg-black"}`}>
+            <Header 
+             onClick={handleThemeChange}
+             />
+            <NowPlayingMovies />
+            <UpcomingMoviesList />
+            <PopularMovieList />
+            <TopRatedMovieList />
+            <Footer />
+        </div>
 
-    </div>
-     
-     
+
     )
 }
