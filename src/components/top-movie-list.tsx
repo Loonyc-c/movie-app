@@ -31,7 +31,7 @@ export const TopRatedMovieList = () => {
     
 
     return (
-        <div className="w-[1280px] bg-red-500 mt-[50px] px-[30px]">
+        <div className="w-[1280px] mt-[50px] px-[30px]">
             <div className="flex justify-between mb-[20px]">
                 <h1 className="text-[30px] font-extrabold">Top Rated</h1>
                 <Button> See more </Button>

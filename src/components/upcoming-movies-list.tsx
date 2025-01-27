@@ -29,7 +29,7 @@ export const UpcomingMoviesList = () => {
     // console.log("this is up coming movies:", upComingMovies)
 
     return (
-        <div className=" w-[1280px] bg-green-500 mt-[50px] px-[30px]">
+        <div className=" w-[1280px] mt-[50px] px-[30px]">
             <div className="flex justify-between mb-[20px]">
                 <h1 className="text-[30px] font-extrabold">Upcoming</h1>
                 <Button> See more </Button>
