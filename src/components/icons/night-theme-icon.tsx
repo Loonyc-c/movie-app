@@ -7,7 +7,7 @@ const NightThemeIcon = () => (
     fill="none"
   >
     <path
-      stroke="#18181B"
+      stroke="black"
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M7 .5a4.243 4.243 0 1 0 6 6 6 6 0 1 1-6-6Z"

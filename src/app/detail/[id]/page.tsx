@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-const Category = () => {
+const Detailed = () => {
     const params = useParams<{ id: string }>()
     console.log(params)
 
@@ -13,4 +13,4 @@ const Category = () => {
     )
 }
 
-export default Category
+export default Detailed

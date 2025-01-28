@@ -8,8 +8,8 @@ export const Footer = () => {
     // }
 
     return (
-        <div className="w-screen bg-blue-500 flex justify-center">
-        <div className="w-[1280px] h-[220px] pt-[20px] flex  justify-between">
+        <div className="w-screen bg-[#4338CA] flex justify-center">
+        <div className="w-full max-w-[1280px] h-[220px] pt-[20px] flex  justify-between">
             <div className="flex flex-col gap-[10px]">
                 <LogoWhite />
                 <p className="text-[14px] text-white">© 2024 Movie Z. All Rights Reserved.</p>

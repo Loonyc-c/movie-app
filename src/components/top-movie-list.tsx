@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
 import ImbdStar from "./icons/imbd-star"
 
 type TopMovie = {
-   title: string
-   id:number
-       poster_path: string
+    title: string
+    id: number
+    poster_path: string
     vote_average: number
     original_title: string
 }
@@ -36,25 +38,34 @@ export const TopRatedMovieList = () => {
     }, [])
 
     // console.log("this is top rated movies:", allTopRatedMovies)
-    
+
 
     return (
-        <div className="w-[1280px] mt-[50px] px-[30px]">
+        <div className="max-w-screen-xl mx-auto mt-[50px] px-[30px]">
             <div className="flex justify-between mb-[20px]">
-                <h1 className="text-[30px] font-extrabold">Top Rated</h1>
-                <Button> See more </Button>
+                <h1 className="text-2xl sm:text-3xl font-extrabold">Top Rated</h1>
+                <Link href="/category/top_rated">
+                    <Button>
+                        See more
+                        <ArrowRight />
+                    </Button>
+                </Link>
+
             </div>
-            <div className="gap-[10px] w-[100%] h-[] grid grid-cols-5 flex">
+            <div className="gap-[30px] w-[100%] h-[] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex">
                 {allTopRatedMovies.slice(0, 10).map((movie) => (
-                    <div key={movie.id} className=" flex grid grid-col-2 h-[440px] w-[230px]">
-                        <div className="bg-black">  
-                        <img
-                            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                            alt={movie.title}
-                            className="w-full h-auto"
-                        />
+                    <div key={movie.id}
+                        className="group cursor-pointer relative rounded-lg overflow-hidden h-[440px] w-[230px]">
+                        <div className="relative">
+                            <img
+                                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                alt={movie.title}
+                                className="w-full h-[260px] sm:h-[345px] object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+
                         </div>
-                        <div className="bg-gray-500 gap-[5px] h-[95px] px-[10px] py-[5px]">
+                        <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[95px] px-[10px] py-[5px]">
                             <div className="gap-[5px] flex items-center">
                                 <ImbdStar />
                                 <div>

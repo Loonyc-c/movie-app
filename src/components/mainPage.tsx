@@ -11,7 +11,7 @@ export const MainPage = () => {
 
 
     return (
-        <div className={`w-screen h-full gap-[20px] flex flex-col items-center}`}>
+        <div className={`w-screen h-full gap-[20px] flex flex-col items-center justify-center}`}>
             <Header/>
             <NowPlayingMovies />
             <UpcomingMoviesList />
