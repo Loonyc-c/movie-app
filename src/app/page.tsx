@@ -1,18 +1,16 @@
 import { MainPage } from "@/components/mainPage";
+import { ThemeProvider } from "@/components/theme-provider";
+
 export default function Home() {
   
-  // const moviesApiKey = "1f25dddf1c81350b49714e3329104a98"
-
-  // const getMovies = async () =>{
-  //   try {
-  //     const response = await fetch(
-        
-  //     )
-  //   }
-  // }
   return (
-   <div className=" ">
+    <ThemeProvider
+    attribute="class"
+    defaultTheme="system"
+    enableSystem
+    disableTransitionOnChange
+  >
     <MainPage />
-   </div>
+  </ ThemeProvider>
   );
 }

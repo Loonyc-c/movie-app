@@ -4,8 +4,16 @@ import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
 import ImbdStar from "./icons/imbd-star"
 
+type TopMovie = {
+   title: string
+   id:number
+       poster_path: string
+    vote_average: number
+    original_title: string
+}
+
 export const TopRatedMovieList = () => {
-    const [allTopRatedMovies, setAllTopRatedMovies] = useState([])
+    const [allTopRatedMovies, setAllTopRatedMovies] = useState<TopMovie[]>([])
 
     const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
     const baseUrl = "https://api.themoviedb.org/3"
@@ -27,7 +35,7 @@ export const TopRatedMovieList = () => {
         getTopRatedMovies()
     }, [])
 
-    console.log("this is top rated movies:", allTopRatedMovies)
+    // console.log("this is top rated movies:", allTopRatedMovies)
     
 
     return (

@@ -5,9 +5,17 @@ import { useState } from "react"
 import { useEffect } from "react"
 import ImbdStar from "./icons/imbd-star"
 
+type Movie = {
+    id: number 
+    title:string
+    poster_path: string
+    vote_average: number
+    original_title: string
+}
+
 export const PopularMovieList = () => {
 
-    const [allPopularMovies, setAllPopularMovies] = useState([])
+    const [allPopularMovies, setAllPopularMovies] = useState <Movie []>([])
 
     const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
     const baseUrl = "https://api.themoviedb.org/3"
