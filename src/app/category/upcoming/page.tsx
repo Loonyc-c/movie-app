@@ -52,7 +52,7 @@ const Upcoming = () => {
         getUpcomingMovies()
     }, [currentPage])
 
-    const handlePageChange = (page:number)=>{
+    const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
 
@@ -98,22 +98,30 @@ const Upcoming = () => {
                         ))}
                     </div>
                 </div>
-                <div> 
+                <div>
                     <Pagination>
                         <PaginationContent>
                             <PaginationItem>
-                                <PaginationPrevious href="#" 
-                                onClick={()=>currentPage > 1 && handlePageChange(currentPage - 1)}
+
+                                <PaginationPrevious href="#"
+                                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                                 />
                             </PaginationItem>
 
                             <PaginationItem>
-                                <PaginationLink className="border" href="#">1</PaginationLink>
+                                {
+                                    [1, 2, 3, 5, 6, 7].map((page) => (
+                                        <PaginationLink key={page} className="border" onClick={() => handlePageChange(page)} href="#">
+                                            {page}
+                                        </PaginationLink>
+                                    ))
+                                }
+                                {/* <PaginationLink className="border" href="#">1</PaginationLink> */}
                             </PaginationItem>
-                            
+
                             <PaginationItem>
-                                <PaginationNext href="#" 
-                                onClick={()=> handlePageChange(currentPage + 1)}
+                                <PaginationNext href="#"
+                                    onClick={() => handlePageChange(currentPage + 1)}
                                 />
                             </PaginationItem>
                         </PaginationContent>

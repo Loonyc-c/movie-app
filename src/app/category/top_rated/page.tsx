@@ -96,7 +96,7 @@ const TopRatedMovieList = () => {
                 </div>
             </div>
             <div>
-                <div>
+                <div >
                     <Pagination>
                         <PaginationContent>
                             <PaginationItem>
@@ -106,7 +106,18 @@ const TopRatedMovieList = () => {
                             </PaginationItem>
 
                             <PaginationItem>
-                                <PaginationLink className="border" href="#">1</PaginationLink>
+
+                                {
+                                    [1,2,3,4,5,6,7].map((page)=>(
+                                        <PaginationLink key={page} className="border" href="#" onClick={()=> handlePageChange(page)}>
+                                            {page}
+                                        </PaginationLink>
+                                    ))
+                                }
+
+
+
+
                             </PaginationItem>
 
                             <PaginationItem>

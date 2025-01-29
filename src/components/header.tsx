@@ -9,6 +9,7 @@ import { ChangeEvent } from "react";
 import ImbdStar from "./icons/imbd-star"
 import { ChevronRight } from "lucide-react"
 import ModeToggle from "./mode-toggle"
+import Link from "next/link"
 
 import {
     DropdownMenu,
@@ -90,7 +91,10 @@ export const Header = () => {
     return (
         <div className="bg-white dark:bg-[#09090B] w-screen sticky top-0 z-50 relative flex  justify-center">
             <div className={` relative w-full max-w-[1280px] mx-auto h-[50px] flex items-center justify-between } `}>
-                <LogoBlue />
+                <Link href="/">
+                    <LogoBlue />
+                </Link>
+
                 <div className="w-[500px] h-[35px] flex gap-[10px] ">
                     <DropdownMenu >
                         <DropdownMenuTrigger className="bg-white dark:bg-[#09090B] flex gap-[5px] border justify-center items-center w-[100px] rounded-lg"><ChevronDown className="w-[15px]" /> Genre</DropdownMenuTrigger>
@@ -120,33 +124,33 @@ export const Header = () => {
                         <input onChange={handleSearchChange} className="w-[100%] bg-white dark:bg-[#09090B]" placeholder="search" type="text" />
                     </div>
                     {shouldDisplay && (
-                    <div className=" rounded-lg pt-[10px] pl-[10px] absolute mt-[50px] z-30 flex flex-col w-[600px] h-[] border  bg-white">
-                        {filteredData.slice(0, 5).map((movie) => (
+                        <div className=" rounded-lg pt-[10px] pl-[10px] absolute mt-[50px] z-30 flex flex-col w-[600px] h-[] border  bg-white">
+                            {filteredData.slice(0, 5).map((movie) => (
 
-                            <div key={movie.id} className="flex gap-[10px] border-b-2 py-[10px]">
-                                <img
-                                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
-                                />
-                                <div>
-                                    <p className="font-extrabold">{movie.title}</p>
-                                    <div className="flex items-center gap-[5px]">
-                                        <ImbdStar />
-                                        <div className="">
-                                            <span className="font-semibold">{movie.vote_average}</span>
-                                            <span className="text-[12px]">/10</span>
+                                <div key={movie.id} className="flex gap-[10px] border-b-2 py-[10px]">
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
+                                    />
+                                    <div>
+                                        <p className="font-extrabold">{movie.title}</p>
+                                        <div className="flex items-center gap-[5px]">
+                                            <ImbdStar />
+                                            <div className="">
+                                                <span className="font-semibold">{movie.vote_average}</span>
+                                                <span className="text-[12px]">/10</span>
+                                            </div>
                                         </div>
+                                        <p className="text-[14px] font-semibold">{movie.release_date}</p>
                                     </div>
-                                    <p className="text-[14px] font-semibold">{movie.release_date}</p>
                                 </div>
-                            </div>
-                        ))}
-                        <p className="my-[20px]">See all result for "{searchValue}"</p>
-                    </div>
-                )}
+                            ))}
+                            <p className="my-[20px]">See all result for "{searchValue}"</p>
+                        </div>
+                    )}
                 </div>
-               
+
                 <ModeToggle />
             </div>
 
