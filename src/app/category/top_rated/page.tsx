@@ -6,6 +6,7 @@ import ImbdStar from "@/components/icons/imbd-star"
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { ThemeProvider } from "@/components/theme-provider"
 
 import {
     Pagination,
@@ -16,6 +17,8 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+
+import Link from "next/link"
 
 type TopMovie = {
     title: string
@@ -61,77 +64,86 @@ const TopRatedMovieList = () => {
 
 
     return (
-        <div className="flex flex-col gap-[30px]">
-            <Header />
+        <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange>
+            <div className="flex flex-col gap-[30px]">
+                <Header />
 
-            <div className="max-w-screen-xl mx-auto  px-[30px]">
-                <div className="flex justify-between mb-[20px]">
-                    <h1 className="text-2xl sm:text-3xl font-extrabold">Top Rated</h1>
-                </div>
-                <div className="gap-[30px] w-[100%] h-[] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex">
-                    {allTopRatedMovies.map((movie) => (
-                        <div key={movie.id}
-                            className="group cursor-pointer relative rounded-lg overflow-hidden h-[440px] w-[230px]">
-                            <div className="relative">
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-full h-[260px] sm:h-[345px] object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                <div className="max-w-screen-xl mx-auto  px-[30px]">
+                    <div className="flex justify-between mb-[20px]">
+                        <h1 className="text-2xl sm:text-3xl font-extrabold">Top Rated</h1>
+                    </div>
+                    <div className="gap-[30px] w-[100%] h-[] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex">
+                        {allTopRatedMovies.map((movie) => (
+                                                <Link key={movie.id} href={`/detail/${movie.id}`}>
 
-                            </div>
-                            <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[95px] px-[10px] py-[5px]">
-                                <div className="gap-[5px] flex items-center">
-                                    <ImbdStar />
-                                    <div>
-                                        <span className="font-bold">{movie.vote_average}</span>
-                                        <span className="text-[12px]">/10</span>
-                                    </div>
+                            <div key={movie.id}
+                                className="group cursor-pointer relative rounded-lg overflow-hidden h-[440px] w-[230px]">
+                                <div className="relative">
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-full h-[260px] sm:h-[345px] object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+
                                 </div>
-                                <h4 >{movie.original_title} </h4>
+                                <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[95px] px-[10px] py-[5px]">
+                                    <div className="gap-[5px] flex items-center">
+                                        <ImbdStar />
+                                        <div>
+                                            <span className="font-bold">{movie.vote_average}</span>
+                                            <span className="text-[12px]">/10</span>
+                                        </div>
+                                    </div>
+                                    <h4 >{movie.original_title} </h4>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                            </Link>
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div >
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious href="#"
-                                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                                />
-                            </PaginationItem>
+                <div>
+                    <div >
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious href="#"
+                                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                                    />
+                                </PaginationItem>
 
-                            <PaginationItem>
+                                <PaginationItem>
 
-                                {
-                                    [1,2,3,4,5,6,7].map((page)=>(
-                                        <PaginationLink key={page} className="border" href="#" onClick={()=> handlePageChange(page)}>
-                                            {page}
-                                        </PaginationLink>
-                                    ))
-                                }
-
+                                    {
+                                        [1, 2, 3, 4, 5, 6, 7].map((page) => (
+                                            <PaginationLink key={page} className="border" href="#" onClick={() => handlePageChange(page)}>
+                                                {page}
+                                            </PaginationLink>
+                                        ))
+                                    }
 
 
 
-                            </PaginationItem>
 
-                            <PaginationItem>
-                                <PaginationNext href="#"
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                                </PaginationItem>
 
+                                <PaginationItem>
+                                    <PaginationNext href="#"
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+
+                    </div>
                 </div>
+                <Footer />
             </div>
-            <Footer />
-        </div>
+        </ThemeProvider>
     )
 }
 

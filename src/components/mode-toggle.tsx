@@ -7,6 +7,7 @@ import NightThemeIcon from "./icons/night-theme-icon"
 import { useTheme } from "next-themes"
 
 const ModeToggle=() =>{
+  
   const {theme, setTheme } = useTheme()
 
   return (

@@ -14,6 +14,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import Link from "next/link"
 
 type Movie = {
     title: string
@@ -72,6 +73,8 @@ const Upcoming = () => {
                     </div>
                     <div className="w-[100%] gap-[30px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                         {upComingMovies.map((movie) => (
+                                                <Link key={movie.id} href={`/detail/${movie.id}`}>
+
                             <div
                                 key={movie.id}
                                 className="group cursor-pointer rounded-lg overflow-hidden h-[440px] w-[230px] relative"
@@ -95,6 +98,7 @@ const Upcoming = () => {
                                     <h4>{movie.original_title}</h4>
                                 </div>
                             </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

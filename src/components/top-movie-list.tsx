@@ -54,6 +54,7 @@ export const TopRatedMovieList = () => {
             </div>
             <div className="gap-[30px] w-[100%] h-[] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex">
                 {allTopRatedMovies.slice(0, 10).map((movie) => (
+                    <Link key={movie.id} href={`/detail/${movie.id}`}>
                     <div key={movie.id}
                         className="group cursor-pointer relative rounded-lg overflow-hidden h-[440px] w-[230px]">
                         <div className="relative">
@@ -76,6 +77,7 @@ export const TopRatedMovieList = () => {
                             <h4 >{movie.original_title} </h4>
                         </div>
                     </div>
+                    </Link>
                 ))}
             </div>
         </div>
