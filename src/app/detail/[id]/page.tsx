@@ -10,6 +10,17 @@ import BigStar from "@/components/icons/big-star";
 import ImbdStar from "@/components/icons/imbd-star";
 import Link from "next/link";
 import PlayIcon from "@/components/icons/play-icon";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
+import ReactPlayer from 'react-player/youtube'
+
 
 type Movie = {
     poster_path: string
@@ -18,6 +29,16 @@ type Movie = {
     vote_count: number
     original_title: string
     release_date: number
+    genres: Genre[]
+    overview: string
+    cast: string
+    id:number
+
+}
+
+type Genre = {
+    id: number
+    name: string
 }
 
 type SimilarMovie = {
@@ -28,10 +49,41 @@ type SimilarMovie = {
 
 }
 
+type Cast = {
+    id: string
+    name: string
+}
+
+type Crew = {
+    adult: boolean
+    credit_id: string
+    department: string
+    gender: number
+    id: number
+    job: string
+    known_for_department: string
+    name: string
+    original_name: string
+    popularity: number
+    profile_path: string
+}
+
+type Credit = {
+    cast: Cast[]
+    crew: Crew[]
+    id: number
+}
+
+type MovieTrailer = {
+    id: string
+    key: string
+}
+
 const Detailed = () => {
-    const [movie, setMovie] = useState<Movie[]>([])
-    const [credit, setCredit] = useState([])
+    const [movie, setMovie] = useState<Movie>({} as Movie)
+    const [credit, setCredit] = useState<Credit>({} as Credit)
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>([])
+    const [movieTrailer, setMovieTrailer] = useState<MovieTrailer>({} as MovieTrailer)
     const { id } = useParams()
     // const params= useParams<{id:number}>()
 
@@ -39,7 +91,7 @@ const Detailed = () => {
     const baseUrl = "https://api.themoviedb.org/3"
     const movieUrl = `${baseUrl}/movie/${id}?language=en-US&${moviesApiKey}`;
 
-
+    // console.log(movie.genres)
 
 
     useEffect(() => {
@@ -74,11 +126,10 @@ const Detailed = () => {
         getMovieCredit()
     }, [creditUrl])
 
-    const director = credit?.crew?.find((member) => member.job === "Director")?.name || "";
-    const writer = credit?.crew?.find((member) => member.job === "Writer")?.name || "";
-    // const cast = credit?.cast
+    const director = credit?.crew?.find((member: Crew) => member.job === "Director")?.name || "";
+    const writer = credit?.crew?.find((member: Crew) => member.job === "Writer")?.name || "";
 
-    console.log(credit)
+    // console.log(movie)
 
 
 
@@ -101,6 +152,26 @@ const Detailed = () => {
     }, [similarMovieUrl])
 
     // console.log(similarMovies)
+
+    const trailerUrl = `${baseUrl}/movie/${id}/videos?language=en-US&${moviesApiKey}`;
+
+
+    useEffect(() => {
+        const getMovieTrailer = async () => {
+            try {
+                const response = await fetch(trailerUrl)
+                const result = await response.json()
+                const trailer = result.results.find((video: any) => video.type === "Trailer" && video.site === "YouTube");
+                setMovieTrailer(trailer)
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+        getMovieTrailer()
+
+    }, [trailerUrl])
+    console.log(movieTrailer)
 
     return (
         <ThemeProvider
@@ -144,12 +215,31 @@ const Detailed = () => {
                                     src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
                                     className="w-[750px] h-full "
                                 />
-                                <div className="absolute inset-0 bg-black/40">
-                                    <div className="text-white">
-                                        <button className="w-[40px] h-[40px] flex justify-center items-center bg-white rounded-full">
-                                            <PlayIcon />
-                                        </button>
-                                        <p>Play trailer</p>
+                                <div className="absolute inset-0 bg-black/40 p-[20px] flex items-end">
+                                    <div className="text-white flex items-center gap-[10px] ">
+                                        <Dialog >
+                                            <div className="flex gap-[20px]">
+                                                <DialogTrigger className="w-[40px] h-[40px] flex justify-center items-center bg-white rounded-full">
+
+                                                    <PlayIcon />
+
+                                                </DialogTrigger>
+                                                <DialogTrigger>
+                                                    <p>Play trailer</p>
+                                                </DialogTrigger>
+                                            </div>
+
+                                            <DialogContent className="">
+                                                {
+                                                    <div key={movieTrailer.id} className="w-[500px] h-[400px]" >
+                                                        <ReactPlayer
+
+                                                            url={`https://www.youtube.com/watch?v=${movieTrailer.key}`}
+                                                        />
+                                                    </div>
+                                                }
+                                            </DialogContent>
+                                        </Dialog>
 
                                     </div>
 
@@ -172,18 +262,18 @@ const Detailed = () => {
                         <p> {movie.overview}</p>
                         <div className="flex flex-col gap-[0px]">
                             <div className="flex gap-[20px] border-b-2 py-[10px]">
-                                <h4>Director</h4>
+                                <h4 className="font-extrabold">Director</h4>
                                 <span>{director}</span>
                             </div>
                             <div className="flex gap-[20px] border-b-2 py-[10px]">
-                                <h4>Writers</h4>
+                                <h4 className="font-extrabold">Writers</h4>
                                 <span>{writer}</span>
                             </div>
                             <div className="flex gap-[20px] border-b-2 py-[10px]">
-                                <h4>Stars</h4>
-                                <div>
-                                    {credit.cast?.slice(0, 5).map((cast) => {
-                                        <p className="text-black" key={cast.id}> {cast.name} </p>
+                                <h4 className="font-extrabold">Stars</h4>
+                                <div className="flex gap-[10px]">
+                                    {credit?.cast?.slice(0, 5).map((cast) => {
+                                        return <p className="text-black" key={cast.id}> {cast.name} </p>
                                     })}
                                 </div>
 
@@ -192,8 +282,11 @@ const Detailed = () => {
                     </div>
                     <div className="w-[1080px] flex flex-col  gap-[20px] ">
                         <div className="flex justify-between">
-                            <h1>More like this</h1>
+                            <h1 className="font-extrabold text-[30px]" >More like this</h1>
+                            <Link key={movie.id} href={`/category/${movie.id}/similar`}>
+
                             <Button>See more</Button>
+                            </Link>
                         </div>
                         <div className="flex justify-between">
                             {
