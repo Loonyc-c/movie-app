@@ -114,7 +114,7 @@ const Upcoming = () => {
 
                             <PaginationItem>
                                 {
-                                    [1, 2, 3, 5, 6, 7].map((page) => (
+                                    [1, 2, 3, 5, 6, 7,8,9,10].map((page) => (
                                         <PaginationLink key={page} className="border" onClick={() => handlePageChange(page)} href="#">
                                             {page}
                                         </PaginationLink>

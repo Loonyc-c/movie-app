@@ -107,13 +107,16 @@ export const Header = () => {
                             <DropdownMenuItem className="flex flex-wrap">
                                 {
                                     genre.map((genre) => (
-                                        <div key={genre.id}>
-                                            <Button className="h-[20px] ">
-                                                {genre.name}
-                                                <ChevronRight className="w-[10px] " />
-                                            </Button>
 
-                                        </div>
+                                        <Link key={genre.id} href={`/genres/${genre.id}`}>
+                                            <div key={genre.id}>
+                                                <Button className="h-[20px] ">
+                                                    {genre.name}
+                                                    <ChevronRight className="w-[10px] " />
+                                                </Button>
+
+                                            </div>
+                                        </Link>
                                     ))
                                 }
                             </DropdownMenuItem>
@@ -127,24 +130,27 @@ export const Header = () => {
                         <div className=" rounded-lg pt-[10px] pl-[10px] absolute mt-[50px] z-30 flex flex-col w-[600px] h-[] border  bg-white">
                             {filteredData.slice(0, 5).map((movie) => (
 
-                                <div key={movie.id} className="flex gap-[10px] border-b-2 py-[10px]">
-                                    <img
-                                        src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                        alt={movie.title}
-                                        className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
-                                    />
-                                    <div>
-                                        <p className="font-extrabold">{movie.title}</p>
-                                        <div className="flex items-center gap-[5px]">
-                                            <ImbdStar />
-                                            <div className="">
-                                                <span className="font-semibold">{movie.vote_average}</span>
-                                                <span className="text-[12px]">/10</span>
+                                <Link key={movie.id} href={`/detail/${movie.id}`}>
+
+                                    <div key={movie.id} className="flex gap-[10px] border-b-2 py-[10px]">
+                                        <img
+                                            src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                                            alt={movie.title}
+                                            className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
+                                        />
+                                        <div>
+                                            <p className="font-extrabold">{movie.title}</p>
+                                            <div className="flex items-center gap-[5px]">
+                                                <ImbdStar />
+                                                <div className="">
+                                                    <span className="font-semibold">{movie.vote_average}</span>
+                                                    <span className="text-[12px]">/10</span>
+                                                </div>
                                             </div>
+                                            <p className="text-[14px] font-semibold">{movie.release_date}</p>
                                         </div>
-                                        <p className="text-[14px] font-semibold">{movie.release_date}</p>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                             <p className="my-[20px]">See all result for "{searchValue}"</p>
                         </div>
