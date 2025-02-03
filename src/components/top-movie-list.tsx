@@ -5,6 +5,7 @@ import { Button } from "./ui/button"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import ImbdStar from "./icons/imbd-star"
+import { fetchTopRatedMovies } from "@/app/utils/api"
 
 type TopMovie = {
     title: string
@@ -17,25 +18,13 @@ type TopMovie = {
 export const TopRatedMovieList = () => {
     const [allTopRatedMovies, setAllTopRatedMovies] = useState<TopMovie[]>([])
 
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    const apiUrl = baseUrl + "/movie/top_rated?language=en-US&page=1&" + moviesApiKey
-
-    const getTopRatedMovies = async () => {
-        try {
-
-            const response = await fetch(apiUrl)
-            const result = await response.json()
-            const movies = result.results
-            setAllTopRatedMovies(movies)
-            // console.log(result)
-        } catch (error) {
-            console.log(error)
+    useEffect(()=>{
+        const getMovies = async () => {
+            const data = await fetchTopRatedMovies()
+            setAllTopRatedMovies(data.results)
         }
-    }
-    useEffect(() => {
-        getTopRatedMovies()
-    }, [])
+        getMovies()
+    },[])
 
     // console.log("this is top rated movies:", allTopRatedMovies)
 

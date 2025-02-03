@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer"
 import { useState,useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronRight } from "lucide-react"
+import { fetchGenres } from "@/app/utils/api"
 
 const Genres = () => {
 
@@ -33,6 +34,16 @@ const Genres = () => {
         getGenres()
     },[genresApi])
 
+    // useEffect(()=>{
+    //     const getGenres = async () => {
+    //         const data = await fetchGenres()
+    //         setGenres(data)
+    //     }
+    //     getGenres()
+    // },[genres])
+
+
+
     useEffect(()=>{
         const getFilteredGenres = async () =>{
             const response = await fetch(filteredApi)
@@ -43,7 +54,7 @@ const Genres = () => {
 
     },[filteredApi])
 
-    console.log(filteredGenre)
+    // console.log(filteredGenre)
 
   
 

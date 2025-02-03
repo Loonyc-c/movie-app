@@ -129,7 +129,6 @@ const SimilarMoviePage = () => {
 
             </div>
         </ThemeProvider>
-
     )
 }
 export default SimilarMoviePage

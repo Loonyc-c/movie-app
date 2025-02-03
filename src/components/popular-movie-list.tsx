@@ -6,7 +6,7 @@ import { useEffect } from "react"
 import ImbdStar from "./icons/imbd-star"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-
+import { fetchPopularMovies } from "@/app/utils/api"
 type Movie = {
     id: number
     title: string
@@ -18,27 +18,15 @@ type Movie = {
 export const PopularMovieList = () => {
 
     const [allPopularMovies, setAllPopularMovies] = useState<Movie[]>([])
-
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    const apiUrl = baseUrl + "/movie/popular?language=en-US&page=1&" + moviesApiKey
-
-    const getPopularMovies = async () => {
-        try {
-
-            const response = await fetch(apiUrl)
-
-            const result = await response.json()
-            const movies = result.results
-            setAllPopularMovies(movies)
-            // console.log(result)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    
     useEffect(() => {
+        const getPopularMovies = async () => {
+            const data = await fetchPopularMovies()
+            setAllPopularMovies(data.results)
+        }
         getPopularMovies()
     }, [])
+
     // console.log(allPopularMovies)
 
     return (

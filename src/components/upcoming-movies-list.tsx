@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import ImbdStar from "./icons/imbd-star"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { fetchUpcomingMovies } from "@/app/utils/api"
 
 type Movie = {
     title: string
@@ -17,28 +18,16 @@ type Movie = {
 export const UpcomingMoviesList = () => {
     const [upComingMovies, setUpComingMovies] = useState<Movie[]>([])
 
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    const apiUrl = baseUrl + "/movie/upcoming?language=en-US&page=1&" + moviesApiKey
-
-    // console.log(apiUrl)
-
-    const getUpcomingMovies = async () => {
-        try {
-
-            const response = await fetch(apiUrl)
-            const result = await response.json()
-            const movies = result.results
-            setUpComingMovies(movies)
-            // console.log(result)
-        } catch (error) {
-            console.log(error)
-        }
-    }
     useEffect(() => {
-        getUpcomingMovies()
-    }, [])
-    // console.log("this is up coming movies:", upComingMovies)
+        const getUpcomingMovies = async () => {
+            const movies = await fetchUpcomingMovies();
+            setUpComingMovies(movies.results);
+        };
+
+        getUpcomingMovies();
+    }, []);
+
+    // console.log(upComingMovies)
 
 
 

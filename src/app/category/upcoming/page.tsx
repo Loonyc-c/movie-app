@@ -15,6 +15,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import Link from "next/link"
+import { fetchUpcomingMovies } from "@/app/utils/api"
 
 type Movie = {
     title: string
@@ -34,28 +35,19 @@ const Upcoming = () => {
     const baseUrl = "https://api.themoviedb.org/3"
     const apiUrl = `${baseUrl}/movie/upcoming?language=en-US&page=${currentPage}&${moviesApiKey}`
 
-    // console.log(apiUrl)
 
-    const getUpcomingMovies = async () => {
-        try {
-
-            const response = await fetch(apiUrl)
-            const result = await response.json()
-            const movies = result.results
-            setUpComingMovies(movies)
-            // console.log(result)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        getUpcomingMovies()
-    }, [currentPage])
-
+    
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
+    
+    useEffect(()=>{
+       const getMovies = async ()=> {
+            const data = await fetchUpcomingMovies()
+            setUpComingMovies(data.results)
+       }
+       getMovies()
+    },[currentPage])
 
     return (
         <ThemeProvider
