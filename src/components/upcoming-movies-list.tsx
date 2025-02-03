@@ -20,10 +20,9 @@ export const UpcomingMoviesList = () => {
 
     useEffect(() => {
         const getUpcomingMovies = async () => {
-            const movies = await fetchUpcomingMovies();
+            const movies = await fetchUpcomingMovies(1);
             setUpComingMovies(movies.results);
         };
-
         getUpcomingMovies();
     }, []);
 

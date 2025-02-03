@@ -18,6 +18,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import { ThemeProvider } from "@/components/theme-provider"
+import { fetchPopularMovies } from "@/app/utils/api"
 
 
 type Movie = {
@@ -32,31 +33,19 @@ const Popular = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [allPopularMovies, setAllPopularMovies] = useState<Movie[]>([])
 
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    // const apiUrl = baseUrl + "/movie/popular?language=en-US&page=1&" + moviesApiKey
-    const apiUrl = `${baseUrl}/movie/popular?language=en-US&page=1${currentPage}&${moviesApiKey}`
 
-    const getPopularMovies = async () => {
-        try {
-
-            const response = await fetch(apiUrl)
-            const result = await response.json()
-            const movies = result.results
-            setAllPopularMovies(movies)
-            // console.log(result)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    useEffect(() => {
-        getPopularMovies()
-    }, [currentPage])
-    // console.log(allPopularMovies)
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
+
+    useEffect(()=>{
+      const getMovies = async () => {
+        const result = await fetchPopularMovies(currentPage)
+        setAllPopularMovies(result.results)
+      }
+      getMovies()
+    },[currentPage])
 
     return (
         <ThemeProvider attribute="class"

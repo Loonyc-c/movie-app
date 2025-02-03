@@ -30,12 +30,6 @@ const Upcoming = () => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [upComingMovies, setUpComingMovies] = useState<Movie[]>([])
-
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    const apiUrl = `${baseUrl}/movie/upcoming?language=en-US&page=${currentPage}&${moviesApiKey}`
-
-
     
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
@@ -43,7 +37,7 @@ const Upcoming = () => {
     
     useEffect(()=>{
        const getMovies = async ()=> {
-            const data = await fetchUpcomingMovies()
+            const data = await fetchUpcomingMovies(currentPage)
             setUpComingMovies(data.results)
        }
        getMovies()

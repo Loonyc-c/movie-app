@@ -3,16 +3,16 @@
 import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronRight } from "lucide-react"
-import { fetchGenres } from "@/app/utils/api"
+import { fetchFilteredGenres, fetchGenres } from "@/app/utils/api"
 
 const Genres = () => {
 
     const { id } = useParams()
     const [currentPage, setCurrentPage] = useState(1)
-    const [genres,setGenres] = useState([])
+    const [genres, setGenres] = useState([])
     const [filteredGenre, setFiltereGenre] = useState([])
 
     const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
@@ -20,43 +20,59 @@ const Genres = () => {
     const filteredApi = baseUrl + `discover/movie?language=en&with_genres=${id}&page=${currentPage}&` + moviesApiKey
 
 
-    const genresApi =`${baseUrl}/genre/movie/list?language=en&${moviesApiKey}` 
+    const genresApi = `${baseUrl}/genre/movie/list?language=en&${moviesApiKey}`
     console.log(genresApi)
 
-    useEffect(()=>{
-        const getGenres = async ()=>{
-            const response = await fetch(genresApi)
-            const result = await response.json()
-            const genres = result.genres
-            setGenres(genres)
-             
-        }
-        getGenres()
-    },[genresApi])
+
+    // fetchFiltered({ page: 1 })
 
     // useEffect(()=>{
-    //     const getGenres = async () => {
-    //         const data = await fetchGenres()
-    //         setGenres(data)
+    //     const getGenres = async ()=>{
+    //         const response = await fetch(genresApi)
+    //         const result = await response.json()
+    //         const genres = result.genres
+    //         setGenres(genres)
+
     //     }
     //     getGenres()
-    // },[genres])
+    // },[genresApi])
+
+    useEffect(() => {
+        const getGenres = async () => {
+            const { genres } = await fetchGenres()
+            setGenres(genres)
+        }
+        getGenres()
+    }, [fetchGenres])
 
 
+
+    // useEffect(() => {
+    //     const getFilteredGenres = async () => {
+    //         const response = await fetch(filteredApi)
+    //         const result = await response.json()
+    //         setFiltereGenre(result)
+    //     }
+    //     getFilteredGenres()
+
+    // }, [filteredApi])
 
     useEffect(()=>{
-        const getFilteredGenres = async () =>{
-            const response = await fetch(filteredApi)
-            const result = await response.json()
-            setFiltereGenre(result)
-        }
-        getFilteredGenres()
-
-    },[filteredApi])
+        
+const getFilteredGenres = async () =>{
+    try {
+        const data = await fetchFilteredGenres(currentPage, Number(id)); 
+        setFiltereGenre(data);
+    } catch (error) {
+        console.error("Error fetching genres:", error);
+    }
+};
+       getFilteredGenres()
+    },[currentPage,id])
 
     // console.log(filteredGenre)
 
-  
+
 
     return (
         <div className="flex flex-col items-center">
@@ -73,7 +89,7 @@ const Genres = () => {
                         </div>
                         <div className="w-full h-[200px] flex flex-wrap gap-[5px]">
                             {
-                                genres.map((genre)=>(
+                                genres.map((genre) => (
                                     <div key={genre.id} >
                                         <Button className="h-[20px] py-[5px] text-[12px] rounded-full">
                                             {genre.name}

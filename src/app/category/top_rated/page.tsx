@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/pagination"
 
 import Link from "next/link"
-
+import { fetchTopRatedMovies } from "@/app/utils/api"
 type TopMovie = {
     title: string
     id: number
@@ -32,35 +32,27 @@ const TopRatedMovieList = () => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [allTopRatedMovies, setAllTopRatedMovies] = useState<TopMovie[]>([])
-
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    // const apiUrl = baseUrl + "/movie/top_rated?language=en-US&page=1&" + moviesApiKey
-    const apiUrl = `${baseUrl}/movie/top_rated?language=en-US&page=${currentPage}&${moviesApiKey}`
-
-    const getTopRatedMovies = async () => {
-        try {
-
-            const response = await fetch(apiUrl)
-            const result = await response.json()
-            const movies = result.results
-            setAllTopRatedMovies(movies)
-            // console.log(result)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    useEffect(() => {
-        getTopRatedMovies()
-    }, [currentPage
-
-    ])
-
-    // console.log("this is top rated movies:", allTopRatedMovies)
-
+    
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
+    useEffect(()=>{
+        const getAllTopRatedMovies = async ()=>{
+            try{
+                const result = await fetchTopRatedMovies(currentPage)
+                setAllTopRatedMovies(result.results)
+            }catch (error) {
+                console.log(error)
+            }
+        }
+        getAllTopRatedMovies()
+    },[currentPage])
+
+
+
+
+    // console.log("this is top rated movies:", allTopRatedMovies)
+
 
 
     return (

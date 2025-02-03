@@ -20,11 +20,12 @@ export const TopRatedMovieList = () => {
 
     useEffect(()=>{
         const getMovies = async () => {
-            const data = await fetchTopRatedMovies()
+            const data = await fetchTopRatedMovies(1)
             setAllTopRatedMovies(data.results)
         }
         getMovies()
     },[])
+
 
     // console.log("this is top rated movies:", allTopRatedMovies)
 

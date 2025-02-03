@@ -21,7 +21,7 @@ export const PopularMovieList = () => {
     
     useEffect(() => {
         const getPopularMovies = async () => {
-            const data = await fetchPopularMovies()
+            const data = await fetchPopularMovies(1)
             setAllPopularMovies(data.results)
         }
         getPopularMovies()

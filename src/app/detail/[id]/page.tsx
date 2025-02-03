@@ -20,7 +20,9 @@ import {
 } from "@/components/ui/dialog"
 
 import ReactPlayer from 'react-player/youtube'
-
+import { fetchDetailedMovie } from "@/app/utils/api";
+import { fetchMovieCredit } from "@/app/utils/api";
+import { fetchSimilarMovie } from "@/app/utils/api";
 
 type Movie = {
     poster_path: string
@@ -32,7 +34,7 @@ type Movie = {
     genres: Genre[]
     overview: string
     cast: string
-    id:number
+    id: number
 
 }
 
@@ -79,12 +81,16 @@ type MovieTrailer = {
     key: string
 }
 
+type Id = {
+    id: string
+}
+
 const Detailed = () => {
     const [movie, setMovie] = useState<Movie>({} as Movie)
     const [credit, setCredit] = useState<Credit>({} as Credit)
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>([])
     const [movieTrailer, setMovieTrailer] = useState<MovieTrailer>({} as MovieTrailer)
-    const { id } = useParams()
+    const { id } = useParams<Id>()
     // const params= useParams<{id:number}>()
 
     const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
@@ -93,63 +99,54 @@ const Detailed = () => {
 
     // console.log(movie.genres)
 
+    const creditUrl = `${baseUrl}/movie/${id}/credits?language=en-US&${moviesApiKey}`;
 
     useEffect(() => {
         const getDetailedMovie = async () => {
             try {
-                const response = await fetch(movieUrl)
-                const result = await response.json()
+                const result = await fetchDetailedMovie(id as string)
                 setMovie(result)
-            }
-            catch (error) {
+
+            } catch (error) {
                 console.log(error)
             }
         }
+        //  argument of type 'string | string [] | undefined' is not assignable to parameter of type ' string', type 'undefined' is not assignable to type 'string'
         getDetailedMovie()
+    }, [id])
 
-    }, [movieUrl])
-
-    const creditUrl = `${baseUrl}/movie/${id}/credits?language=en-US&${moviesApiKey}`;
-
-    useEffect(() => {
-
-        const getMovieCredit = async () => {
-            try {
-                const response = await fetch(creditUrl)
-                const result = await response.json()
-                setCredit(result)
-            }
-            catch (error) {
+    useEffect(()=>{
+        const getMovieCredit = async ()=>{
+            try{
+                const response = await fetchMovieCredit(id as string)
+                setCredit(response)
+            }catch(error){
                 console.log(error)
             }
         }
         getMovieCredit()
-    }, [creditUrl])
+    },[id])
+
+    
 
     const director = credit?.crew?.find((member: Crew) => member.job === "Director")?.name || "";
     const writer = credit?.crew?.find((member: Crew) => member.job === "Writer")?.name || "";
 
     // console.log(movie)
 
+    useEffect(()=>{
+        const getSimilarMovie = async () =>{
+            try{
+                const response = await fetchSimilarMovie(id as string)
+                setSimilarMovies(response.results)
 
-
-    const similarMovieUrl = `${baseUrl}/movie/${id}/similar?language=en-US&page=1&${moviesApiKey}`;
-
-    useEffect(() => {
-        const getSimilarMovie = async () => {
-            try {
-                const response = await fetch(similarMovieUrl)
-                const result = await response.json()
-                const similarMovies = result.results
-                setSimilarMovies(similarMovies)
-            }
-            catch (error) {
+            }catch(error){
                 console.log(error)
             }
         }
         getSimilarMovie()
-
-    }, [similarMovieUrl])
+    },[id])
+    
 
     // console.log(similarMovies)
 
@@ -171,7 +168,6 @@ const Detailed = () => {
         getMovieTrailer()
 
     }, [trailerUrl])
-    console.log(movieTrailer)
 
     return (
         <ThemeProvider
@@ -285,7 +281,7 @@ const Detailed = () => {
                             <h1 className="font-extrabold text-[30px]" >More like this</h1>
                             <Link key={movie.id} href={`/category/${movie.id}/similar`}>
 
-                            <Button>See more</Button>
+                                <Button>See more</Button>
                             </Link>
                         </div>
                         <div className="flex justify-between">
