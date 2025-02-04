@@ -15,12 +15,17 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import { fetchSimilarMovie } from "@/app/utils/api"
+import Link from "next/link"
 
 type Movie = {
-    id:number
-    poster_path:string
+    id: number
+    poster_path: string
     original_title: string
-    vote_average:number
+    vote_average: number
+}
+type Id = {
+    id: string
 }
 
 
@@ -28,27 +33,40 @@ const SimilarMoviePage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [similarMovie, setSimilarMovie] = useState<Movie[]>([])
 
-    const { id } = useParams()
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
+    const { id } = useParams<Id>()
+    // const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
+    // const baseUrl = "https://api.themoviedb.org/3"
 
-    const similarMovieUrl = `${baseUrl}/movie/${id}/similar?language=en-US&page=${currentPage}&${moviesApiKey}`;
+    // const similarMovieUrl = `${baseUrl}/movie/${id}/similar?language=en-US&page=${currentPage}&${moviesApiKey}`;
+
+    // useEffect(() => {
+    //     const getSimilarMovie = async () => {
+    //         try {
+    //             const response = await fetch(similarMovieUrl)
+    //             const result = await response.json()
+    //             const similarMovies = result.results
+    //             setSimilarMovie(similarMovies)
+    //         }
+    //         catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     getSimilarMovie()
+
+    // }, [similarMovieUrl])
 
     useEffect(() => {
         const getSimilarMovie = async () => {
             try {
-                const response = await fetch(similarMovieUrl)
-                const result = await response.json()
-                const similarMovies = result.results
-                setSimilarMovie(similarMovies)
-            }
-            catch (error) {
+                const result = await fetchSimilarMovie(id)
+                setSimilarMovie(result.results)
+            } catch (error) {
                 console.log(error)
             }
         }
         getSimilarMovie()
+    }, [id])
 
-    }, [similarMovieUrl])
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
@@ -69,28 +87,31 @@ const SimilarMoviePage = () => {
                     <div className="w-full h-full flex gap-[20px] grid grid-cols-5" >
                         {
                             similarMovie.map((movie) => (
-                                <div key={movie.id} className="group relative cursor-pointer rounded-lg overflow-hidden  h-[440px] w-[230px]">
-                                    <div className="relative">
-                                        <img
-                                            src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                        />
-                                        <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                                <Link key={movie.id} href={`/detail/${movie.id}`}>
 
-                                    </div>
-                                    <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[95px] px-[10px] py-[5px]">
-                                        <div className="gap-[5px] flex items-center">
-                                            <ImbdStar />
-                                            <div>
-                                                <span className="font-bold">{movie.vote_average}</span>
-                                                <span className="text-[12px]">/10</span>
+                                    <div key={movie.id} className="group relative cursor-pointer rounded-lg overflow-hidden  h-[440px] w-[230px]">
+                                        <div className="relative">
+                                            <img
+                                                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                                            />
+                                            <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+
+                                        </div>
+                                        <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[95px] px-[10px] py-[5px]">
+                                            <div className="gap-[5px] flex items-center">
+                                                <ImbdStar />
+                                                <div>
+                                                    <span className="font-bold">{movie.vote_average}</span>
+                                                    <span className="text-[12px]">/10</span>
+                                                </div>
                                             </div>
+
+                                            <h4 >{movie.original_title} </h4>
                                         </div>
 
-                                        <h4 >{movie.original_title} </h4>
+
                                     </div>
-
-
-                                </div>
+                                </Link>
                             ))
                         }
 

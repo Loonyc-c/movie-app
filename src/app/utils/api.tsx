@@ -35,14 +35,6 @@ export const fetchTopRatedMovies = async (currentPage: number) => {
     }
 }
 
-export const fetchGenres = async () => {
-    try {
-        const response = await moviesApi.get(`/genre/movie/list?language=en&${apiKey}`)
-        return response.data
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 export const fetchDetailedMovie = async (id: string) => {
     try {
@@ -63,12 +55,43 @@ export const fetchMovieCredit = async (id: string) => {
 }
 export const fetchSimilarMovie = async (id:string) => {
     try {
-        console.log("start")
         const response = await moviesApi.get(`/movie/${id}/similar?language=en-US&page=1&${apiKey}`)
-        console.log(response.data)
-
         return response.data
     } catch (error) {
+        console.log(error)
+    }
+}
+export const fetchMovieTrailer = async (id:string) =>{
+    try{
+        const response = await moviesApi.get(`/movie/${id}/videos?language=en-US&${apiKey}`)
+        return response.data
+    }catch(error){
+        console.log(Error)
+    }
+}
+export const fetchGenres = async () => {
+    try {
+        const response = await moviesApi.get(`/genre/movie/list?language=en&${apiKey}`)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const fetchFilteredGenres = async (id:string, currentPage:number)=>{
+    try{
+        const response = await moviesApi.get(`/discover/movie?language=en&with_genres=${id}&page=${currentPage}&${apiKey}`)
+        return response.data
+    }catch(error){
+        console.log(error)
+    }
+}
+
+export const fetchSearchedMovie = async (searchValue:string,currentPage:number) =>{
+    try{
+        const response = await moviesApi.get(`/search/movie?query=${searchValue}&language=en-US&page=${currentPage}&${apiKey}`)
+        return response.data
+    } catch(error){
         console.log(error)
     }
 }

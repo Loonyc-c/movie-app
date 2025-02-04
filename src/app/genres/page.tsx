@@ -40,8 +40,7 @@ const Genres = () => {
     const [filteredGenre, setFiltereGenre] = useState<Movie[]>([])
     const router = useRouter()
     const searchParams = useSearchParams()
-    const sgenres = JSON.parse(searchParams.get('genres') || "[]")
-    console.log(sgenres)
+    const searchGenres = JSON.parse(searchParams.get('genres') || "[]")
 
     useEffect(() => {
         const getGenres = async () => {
@@ -54,14 +53,14 @@ const Genres = () => {
     useEffect(() => {
         const getFilteredGenres = async () => {
             try {
-                const result = await fetchFilteredGenres(id, currentPage);
+                const result = await fetchFilteredGenres(id,currentPage);
                 setFiltereGenre(result.results);
             } catch (error) {
                 console.error(error);
             }
         };
         getFilteredGenres()
-    }, [currentPage, id])
+    }, [id,currentPage])
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
@@ -72,15 +71,11 @@ const Genres = () => {
         // const getGenres = newParams.get('genres')
         // const setPage = newParams.set("page=", currentPage)
         newParams.set("page", String(currentPage))
-        sgenres.push(g)
-        newParams.set('genres', JSON.stringify(sgenres))
+        searchGenres.push(g)
+        newParams.set('genres', JSON.stringify(searchGenres))
 
         router.push(`?${newParams.toString()}`)
     }
-
-
-
-
 
     return (
         <div className="flex flex-col gap-[30px] items-center">

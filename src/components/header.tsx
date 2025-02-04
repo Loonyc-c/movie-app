@@ -10,6 +10,9 @@ import ImbdStar from "./icons/imbd-star"
 import { ChevronRight } from "lucide-react"
 import ModeToggle from "./mode-toggle"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
+import { fetchSearchedMovie } from "@/app/utils/api"
+import { fetchGenres } from "@/app/utils/api"
 
 import {
     DropdownMenu,
@@ -39,54 +42,47 @@ export const Header = () => {
     const [searchValue, setSearchValue] = useState<string>("")
     const [filteredData, setFilteredData] = useState<Movie[]>([])
     const [genre, setGenre] = useState<Genre[]>([])
+    const currentPage = 1
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const searchGenres = JSON.parse(searchParams.get('genres') || "[]")
 
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-    const apiUrl = baseUrl + `/search/movie?query=${searchValue}&language=en-US&page=${1}&` + moviesApiKey
 
-
-    const getSearchedMovie = async () => {
-        try {
-            const response = await fetch(apiUrl)
-            const result = await response.json()
-            const movies = result.results
-            setFilteredData(movies)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     useEffect(() => {
+        const getSearchedMovie = async () => {
+            const result = await fetchSearchedMovie(searchValue, currentPage)
+            setFilteredData(result.results)
+        }
         getSearchedMovie()
     }, [searchValue])
 
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
-        // const filtered = 
     }
-    // console.log(filteredData)
 
     const shouldDisplay = searchValue.length > 0 && filteredData.length > 0;
 
-    const genreUrl = baseUrl + "/genre/movie/list?language=en&" + moviesApiKey
-
-    const getGenre = async () => {
-        try {
-            const response = await fetch(genreUrl)
-            const result = await response.json()
-            const genre = result.genres
-            setGenre(genre)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     useEffect(() => {
-        getGenre()
-    }, [])
+        const getGenres = async () => {
+            const { genres } = await fetchGenres()
+            setGenre(genres)
+        }
+        getGenres()
+    }, [fetchGenres])
 
-    // console.log(genre)
+
+    const handleUpdateParams = (g: number) => {
+        const newParams = new URLSearchParams(searchParams)
+        // const getGenres = newParams.get('genres')
+        // const setPage = newParams.set("page=", currentPage)
+        newParams.set("page", String(currentPage))
+        searchGenres.push(g)
+        newParams.set('genres', JSON.stringify(searchGenres))
+
+        router.push(`?${newParams.toString()}`)
+    }
 
     return (
         <div className="bg-white dark:bg-[#09090B] w-screen sticky top-0 z-50 relative flex  justify-center">
@@ -108,7 +104,9 @@ export const Header = () => {
                                 {
                                     genre.map((genre) => (
 
-                                        <Link key={genre.id} href={`/genres/${genre.id}`}>
+                                        <Link key={genre.id} 
+                                        onClick={() => handleUpdateParams(genre.id)} 
+                                        href={`/detail/${searchParams}`}>
                                             <div key={genre.id}>
                                                 <Button className="h-[20px] ">
                                                     {genre.name}

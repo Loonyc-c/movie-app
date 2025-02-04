@@ -23,6 +23,7 @@ import ReactPlayer from 'react-player/youtube'
 import { fetchDetailedMovie } from "@/app/utils/api";
 import { fetchMovieCredit } from "@/app/utils/api";
 import { fetchSimilarMovie } from "@/app/utils/api";
+import { fetchMovieTrailer } from "@/app/utils/api";
 
 type Movie = {
     poster_path: string
@@ -95,11 +96,8 @@ const Detailed = () => {
 
     const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
     const baseUrl = "https://api.themoviedb.org/3"
-    const movieUrl = `${baseUrl}/movie/${id}?language=en-US&${moviesApiKey}`;
 
-    // console.log(movie.genres)
 
-    const creditUrl = `${baseUrl}/movie/${id}/credits?language=en-US&${moviesApiKey}`;
 
     useEffect(() => {
         const getDetailedMovie = async () => {
@@ -115,59 +113,52 @@ const Detailed = () => {
         getDetailedMovie()
     }, [id])
 
-    useEffect(()=>{
-        const getMovieCredit = async ()=>{
-            try{
+    useEffect(() => {
+        const getMovieCredit = async () => {
+            try {
                 const response = await fetchMovieCredit(id as string)
                 setCredit(response)
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         }
         getMovieCredit()
-    },[id])
+    }, [id])
 
-    
+
 
     const director = credit?.crew?.find((member: Crew) => member.job === "Director")?.name || "";
     const writer = credit?.crew?.find((member: Crew) => member.job === "Writer")?.name || "";
 
     // console.log(movie)
 
-    useEffect(()=>{
-        const getSimilarMovie = async () =>{
-            try{
+    useEffect(() => {
+        const getSimilarMovie = async () => {
+            try {
                 const response = await fetchSimilarMovie(id as string)
                 setSimilarMovies(response.results)
 
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         }
         getSimilarMovie()
-    },[id])
-    
-
-    // console.log(similarMovies)
-
-    const trailerUrl = `${baseUrl}/movie/${id}/videos?language=en-US&${moviesApiKey}`;
+    }, [id])
 
 
     useEffect(() => {
         const getMovieTrailer = async () => {
             try {
-                const response = await fetch(trailerUrl)
-                const result = await response.json()
-                const trailer = result.results.find((video: any) => video.type === "Trailer" && video.site === "YouTube");
-                setMovieTrailer(trailer)
+                const result = await fetchMovieTrailer(id)
+                setMovieTrailer(result.results.find((video: any) => video.type === "Trailer" && video.site === "YouTube"))
             } catch (error) {
                 console.log(error)
             }
-
         }
         getMovieTrailer()
+    }, [id])
 
-    }, [trailerUrl])
+    console.log(movieTrailer)
 
     return (
         <ThemeProvider
@@ -236,6 +227,7 @@ const Detailed = () => {
                                                 }
                                             </DialogContent>
                                         </Dialog>
+
 
                                     </div>
 
