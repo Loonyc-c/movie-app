@@ -19,7 +19,5 @@ export const MainPage = () => {
             <TopRatedMovieList />
             <Footer />
         </div>
-
-
     )
 }

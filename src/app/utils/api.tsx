@@ -1,6 +1,5 @@
 'use client'
 import { default as axios } from 'axios';
-import { useEffect } from 'react';
 
 const apiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
 const moviesApi = axios.create({

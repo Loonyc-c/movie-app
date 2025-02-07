@@ -92,12 +92,6 @@ const Detailed = () => {
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>([])
     const [movieTrailer, setMovieTrailer] = useState<MovieTrailer>({} as MovieTrailer)
     const { id } = useParams<Id>()
-    // const params= useParams<{id:number}>()
-
-    const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    const baseUrl = "https://api.themoviedb.org/3"
-
-
 
     useEffect(() => {
         const getDetailedMovie = async () => {
@@ -109,7 +103,6 @@ const Detailed = () => {
                 console.log(error)
             }
         }
-        //  argument of type 'string | string [] | undefined' is not assignable to parameter of type ' string', type 'undefined' is not assignable to type 'string'
         getDetailedMovie()
     }, [id])
 

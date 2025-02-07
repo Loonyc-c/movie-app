@@ -31,16 +31,17 @@ type Movie = {
     original_title: string
     vote_average: number
     poster_path: string
+    id:number
 }
 
 const Genres = () => {
     const { id } = useParams<Id>()
     const [currentPage, setCurrentPage] = useState(1)
     const [genres, setGenres] = useState<Genres[]>([])
-    const [filteredGenre, setFiltereGenre] = useState<Movie[]>([])
+    const [filteredGenre, setFilteredGenre] = useState<Movie[]>([])
     const router = useRouter()
     const searchParams = useSearchParams()
-    const searchGenres = JSON.parse(searchParams.get('genres') || "[]")
+    const selectedGenre = JSON.parse(searchParams.get('genres') || "[]")
 
     useEffect(() => {
         const getGenres = async () => {
@@ -53,48 +54,48 @@ const Genres = () => {
     useEffect(() => {
         const getFilteredGenres = async () => {
             try {
-                const result = await fetchFilteredGenres(id,currentPage);
-                setFiltereGenre(result.results);
+                const result = await fetchFilteredGenres(selectedGenre,currentPage);
+                setFilteredGenre(result.results);
             } catch (error) {
                 console.error(error);
             }
         };
         getFilteredGenres()
-    }, [id,currentPage])
+    }, [selectedGenre,currentPage])
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
 
     const handleUpdateParams = (g: number) => {
-        const newParams = new URLSearchParams(searchParams)
-        // const getGenres = newParams.get('genres')
-        // const setPage = newParams.set("page=", currentPage)
+        const newParams = new URLSearchParams(searchParams.toString())
         newParams.set("page", String(currentPage))
-        searchGenres.push(g)
-        newParams.set('genres', JSON.stringify(searchGenres))
-
+        const updatedGenres = new Set([...selectedGenre, g])
+        newParams.set('genres', JSON.stringify([...updatedGenres]))
         router.push(`?${newParams.toString()}`)
     }
 
+    console.log(filteredGenre)
+
+    
     return (
         <div className="flex flex-col gap-[30px] items-center">
             <Header />
-            <div className="w-[1280px] h-full">
+            <div className="w-[1280px] h-full flex flex-col gap-[20px]">
                 <div className="">
                     <h1 className="font-extrabold text-[30px]">Search Filter</h1>
                 </div>
-                <div className="w-full h-full flex">
-                    <div className="h-full w-[40%]">
+                <div className="w-full h-full flex  ">
+                    <div className="h-screen w-[40%] border-r-2 pr-[20px] flex flex-col gap-[20px]">
                         <div>
-                            <h1>Genres</h1>
+                            <h1 className="text-[26px] font-extrabold">Genres</h1>
                             <h4>See lists of movies by genre</h4>
                         </div>
-                        <div className="w-full h-[200px] flex flex-wrap gap-[5px]">
+                        <div className="w-full h-[200px] flex flex-wrap gap-[5px] ">
                             {
                                 genres.map((genre) => (
                                     <div key={genre.id} onClick={() => handleUpdateParams(genre.id)}>
-                                        <Button className="h-[20px] py-[5px] text-[12px] rounded-full">
+                                        <Button className="h-[20px] py-[5px] text-[12px] border rounded-full bg-white dark:bg-[#09090B] text-black dark:text-white ">
                                             {genre.name}
                                             <ChevronRight />
                                         </Button>
@@ -104,10 +105,10 @@ const Genres = () => {
 
                         </div>
                     </div>
-                    <div className="h-full w-full border-l-2  pl-[30px] gap-[20px] flex justify-between grid grid-cols-4">
+                    <div className="h-full w-full  pl-[30px] gap-[20px] flex justify-between grid grid-cols-4">
                         {
                             filteredGenre.map((movie) => (
-                                <div className="w-[180px] h-[350px] group relative cursor-pointer rounded-lg overflow-hidden ">
+                                <div key={movie.id} className="w-[180px] h-[350px] group relative cursor-pointer rounded-lg overflow-hidden ">
                                     <div className="relative">
                                         <img
                                             src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
