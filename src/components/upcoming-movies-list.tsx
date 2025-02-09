@@ -31,23 +31,23 @@ export const UpcomingMoviesList = () => {
 
 
     return (
-        <div className=" max-w-screen-xl mx-auto mt-[50px] px-[30px]">
-            <div className="flex justify-between mb-[20px]">
+        <div className="max-w-screen-xl mx-auto mt-12 px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between mb-6">
                 <h1 className="text-2xl sm:text-3xl font-extrabold">Upcoming</h1>
                 <Link href="/category/upcoming">
                     <Button className="bg-none">
                         See more
-                        <ArrowRight />
+                        <ArrowRight/>
 
                     </Button>
                 </Link>
             </div>
-            <div className="w-[100%] gap-[30px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="w-[100%] gap-6  grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-5 ">
                 {upComingMovies.slice(0, 10).map((movie) => (
                     <Link key={movie.id} href={`/detail/${movie.id}`}>
                         <div
                             key={movie.id}
-                            className="group cursor-pointer rounded-lg overflow-hidden h-[440px] w-[230px] relative"
+                            className="group cursor-pointer rounded-lg overflow-hidden h-[440px]  w-[230px]    relative"
                         >
                             <div className="relative">
                                 <img

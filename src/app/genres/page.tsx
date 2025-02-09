@@ -9,15 +9,7 @@ import { ChevronRight } from "lucide-react"
 import { fetchFilteredGenres, fetchGenres } from "@/app/utils/api"
 import Link from "next/link"
 import ImbdStar from "@/components/icons/imbd-star"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
+import PaginationComponent from "@/components/pagination"
 import { useRouter } from "next/navigation"
 type Id = {
     id: string
@@ -31,7 +23,7 @@ type Movie = {
     original_title: string
     vote_average: number
     poster_path: string
-    id:number
+    id: number
 }
 
 const Genres = () => {
@@ -42,6 +34,7 @@ const Genres = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const selectedGenre = JSON.parse(searchParams.get('genres') || "[]")
+    const [totalPages,setTotalPages] = useState(0)
 
     useEffect(() => {
         const getGenres = async () => {
@@ -54,30 +47,45 @@ const Genres = () => {
     useEffect(() => {
         const getFilteredGenres = async () => {
             try {
-                const result = await fetchFilteredGenres(selectedGenre,currentPage);
+                const result = await fetchFilteredGenres(selectedGenre, currentPage);
                 setFilteredGenre(result.results);
+                setTotalPages(result.total_pages)
             } catch (error) {
                 console.error(error);
             }
         };
         getFilteredGenres()
-    }, [selectedGenre,currentPage])
+    }, [selectedGenre, currentPage])
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
 
     const handleUpdateParams = (g: number) => {
-        const newParams = new URLSearchParams(searchParams.toString())
-        newParams.set("page", String(currentPage))
-        const updatedGenres = new Set([...selectedGenre, g])
-        newParams.set('genres', JSON.stringify([...updatedGenres]))
-        router.push(`?${newParams.toString()}`)
-    }
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.set("page", String(currentPage));
+
+        // Toggle genre: Add if not in, remove if already present
+        const updatedGenres = new Set(selectedGenre);
+        if (updatedGenres.has(g)) {
+            updatedGenres.delete(g); // Remove if exists
+        } else {
+            updatedGenres.add(g); // Add if not exists
+        }
+
+        // Update URL with new genre list
+        if (updatedGenres.size > 0) {
+            newParams.set('genres', JSON.stringify([...updatedGenres]));
+        } else {
+            newParams.delete('genres'); // Remove param if empty
+        }
+
+        router.push(`?${newParams.toString()}`);
+    };
 
     console.log(filteredGenre)
 
-    
+
     return (
         <div className="flex flex-col gap-[30px] items-center">
             <Header />
@@ -138,34 +146,12 @@ const Genres = () => {
                 </div>
 
             </div>
-            <div>
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious href="#"
-                                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                            />
-                        </PaginationItem>
+            <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
+            />
 
-                        <PaginationItem>
-                            {
-                                [1, 2, 3, 4, 5, 6].map((page) => (
-                                    <PaginationLink key={page} className="border" href="#" onClick={() => handlePageChange(page)}>
-                                        {page}
-                                    </PaginationLink>
-                                ))
-                            }
-                        </PaginationItem>
-
-                        <PaginationItem>
-                            <PaginationNext href="#"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                            />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
-
-            </div>
             <Footer />
 
         </div>

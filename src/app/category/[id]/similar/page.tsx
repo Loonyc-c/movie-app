@@ -4,17 +4,8 @@ import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { ThemeProvider } from "@/components/theme-provider"
 import ImbdStar from "@/components/icons/imbd-star"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
+import PaginationComponent from "@/components/pagination"
 import { fetchSimilarMovie } from "@/app/utils/api"
 import Link from "next/link"
 
@@ -32,34 +23,17 @@ type Id = {
 const SimilarMoviePage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [similarMovie, setSimilarMovie] = useState<Movie[]>([])
+    const [totalPages,setTotalPages] =useState(0)
 
     const { id } = useParams<Id>()
-    // const moviesApiKey = "api_key=1f25dddf1c81350b49714e3329104a98"
-    // const baseUrl = "https://api.themoviedb.org/3"
 
-    // const similarMovieUrl = `${baseUrl}/movie/${id}/similar?language=en-US&page=${currentPage}&${moviesApiKey}`;
-
-    // useEffect(() => {
-    //     const getSimilarMovie = async () => {
-    //         try {
-    //             const response = await fetch(similarMovieUrl)
-    //             const result = await response.json()
-    //             const similarMovies = result.results
-    //             setSimilarMovie(similarMovies)
-    //         }
-    //         catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     getSimilarMovie()
-
-    // }, [similarMovieUrl])
 
     useEffect(() => {
         const getSimilarMovie = async () => {
             try {
                 const result = await fetchSimilarMovie(id)
                 setSimilarMovie(result.results)
+                setTotalPages(result.total_pages)
             } catch (error) {
                 console.log(error)
             }
@@ -71,14 +45,8 @@ const SimilarMoviePage = () => {
         setCurrentPage(page)
     }
 
-
-
     return (
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange>
+
 
             <div className="flex flex-col items-center gap-[30px]">
                 <Header />
@@ -119,37 +87,15 @@ const SimilarMoviePage = () => {
 
                 </div>
                 <div>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious href="#"
-                                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                                />
-                            </PaginationItem>
-
-                            <PaginationItem>
-                                {
-                                    [1, 2, 3, 4, 5, 6].map((page) => (
-                                        <PaginationLink key={page} className="border" href="#" onClick={() => handlePageChange(page)}>
-                                            {page}
-                                        </PaginationLink>
-                                    ))
-                                }
-                            </PaginationItem>
-
-                            <PaginationItem>
-                                <PaginationNext href="#"
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-
+                <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
+            />
                 </div>
                 <Footer />
 
             </div>
-        </ThemeProvider>
     )
 }
 export default SimilarMoviePage

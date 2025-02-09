@@ -22,6 +22,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { usePathname } from "next/navigation"
 
 
 type Movie = {
@@ -39,11 +40,11 @@ type Genre = {
 
 export const Header = () => {
 
-
-    const [searchValue, setSearchValue] = useState<string>("")
+    const [searchValue, setSearchValue] = useState("")
     const [filteredData, setFilteredData] = useState<Movie[]>([])
     const [genre, setGenre] = useState<Genre[]>([])
     const currentPage = 1
+    const pathName = usePathname()
 
 
     useEffect(() => {
@@ -54,8 +55,14 @@ export const Header = () => {
         getSearchedMovie()
     }, [searchValue])
 
+    useEffect(() => {
+        const storedValue = localStorage.getItem("inputValue")
+        if (storedValue) setSearchValue(storedValue)
+    }, [])
+
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
+        localStorage.setItem("inputValue", e.target.value)
     }
 
     const shouldDisplay = searchValue.length > 0 && filteredData.length > 0;
@@ -89,6 +96,7 @@ export const Header = () => {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="flex flex-wrap">
                                 {
+
                                     genre.map((genre) => (
 
                                         <Link key={genre.id}
@@ -112,38 +120,46 @@ export const Header = () => {
                         <SearchIcon />
                         <input onChange={handleSearchChange} className="w-[100%] bg-white dark:bg-[#09090B]" placeholder="search" type="text" />
                     </div>
-                    {shouldDisplay && (
-                        <div className=" rounded-lg pt-[10px] pl-[10px] absolute mt-[50px] z-30 flex flex-col w-[600px] h-[] border  bg-white dark:bg-[#09090B]">
-                            {filteredData.slice(0, 5).map((movie) => (
 
-                                <Link key={movie.id} href={`/detail/${movie.id}`}>
+                    {
 
-                                    <div key={movie.id} className="flex gap-[10px] border-b-2 py-[10px]">
-                                        <img
-                                            src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                            alt={movie.title}
-                                            className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
-                                        />
-                                        <div>
-                                            <p className="font-extrabold">{movie.title}</p>
-                                            <div className="flex items-center gap-[5px]">
-                                                <ImbdStar />
-                                                <div className="">
-                                                    <span className="font-semibold">{movie.vote_average}</span>
-                                                    <span className="text-[12px]">/10</span>
+                        pathName !== "/search" && (
+                            shouldDisplay && (
+                                <div className=" rounded-lg pt-[10px] pl-[10px] absolute mt-[50px] z-30 flex flex-col w-[600px] h-[] border  bg-white dark:bg-[#09090B]">
+                                    {filteredData.slice(0, 5).map((movie) => (
+
+                                        <Link key={movie.id} href={`/detail/${movie.id}`}>
+
+                                            <div key={movie.id} className="flex gap-[10px] border-b-2 py-[10px]">
+                                                <img
+                                                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                                                    alt={movie.title}
+                                                    className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
+                                                />
+                                                <div>
+                                                    <p className="font-extrabold">{movie.title}</p>
+                                                    <div className="flex items-center gap-[5px]">
+                                                        <ImbdStar />
+                                                        <div className="">
+                                                            <span className="font-semibold">{movie.vote_average}</span>
+                                                            <span className="text-[12px]">/10</span>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[14px] font-semibold">{movie.release_date}</p>
                                                 </div>
                                             </div>
-                                            <p className="text-[14px] font-semibold">{movie.release_date}</p>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                            <Link
-                            href={`/search/value=${searchValue}`}>                         
-                               <p className="my-[20px]">See all result for "{searchValue}"</p>
-                            </Link>
-                        </div>
-                    )}
+                                        </Link>
+                                    ))}
+                                    <Link
+                                        href={`/search?`}>
+                                        <p className="my-[20px]">See all result for "{searchValue}"</p>
+                                    </Link>
+                                </div>
+                            )
+
+                        )
+
+                    }
                 </div>
 
                 <ModeToggle />

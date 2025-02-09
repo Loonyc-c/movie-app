@@ -1,25 +1,13 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { ArrowRight } from "lucide-react"
 import ImbdStar from "@/components/icons/imbd-star"
-import { Button } from "@/components/ui/button"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { ThemeProvider } from "@/components/theme-provider"
-
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-
+import PaginationComponent from "@/components/pagination"
 import Link from "next/link"
 import { fetchTopRatedMovies } from "@/app/utils/api"
+
 type TopMovie = {
     title: string
     id: number
@@ -32,21 +20,23 @@ const TopRatedMovieList = () => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [allTopRatedMovies, setAllTopRatedMovies] = useState<TopMovie[]>([])
-    
+    const [totalPages,setTotalPages] = useState(0)
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
     }
-    useEffect(()=>{
-        const getAllTopRatedMovies = async ()=>{
-            try{
+    useEffect(() => {
+        const getAllTopRatedMovies = async () => {
+            try {
                 const result = await fetchTopRatedMovies(currentPage)
                 setAllTopRatedMovies(result.results)
-            }catch (error) {
+                setTotalPages(result.total_pages)
+            } catch (error) {
                 console.log(error)
             }
         }
         getAllTopRatedMovies()
-    },[currentPage])
+    }, [currentPage])
 
 
 
@@ -56,21 +46,17 @@ const TopRatedMovieList = () => {
 
 
     return (
-        <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange>
-            <div className="flex flex-col gap-[30px]">
-                <Header />
 
-                <div className="max-w-screen-xl mx-auto  px-[30px]">
-                    <div className="flex justify-between mb-[20px]">
-                        <h1 className="text-2xl sm:text-3xl font-extrabold">Top Rated</h1>
-                    </div>
-                    <div className="gap-[30px] w-[100%] h-[] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex">
-                        {allTopRatedMovies.map((movie) => (
-                                                <Link key={movie.id} href={`/detail/${movie.id}`}>
+        <div className="flex flex-col gap-[30px]">
+            <Header />
+
+            <div className="max-w-screen-xl mx-auto  px-[30px]">
+                <div className="flex justify-between mb-[20px]">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold">Top Rated</h1>
+                </div>
+                <div className="gap-[30px] w-[100%] h-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex">
+                    {allTopRatedMovies.map((movie) => (
+                        <Link key={movie.id} href={`/detail/${movie.id}`}>
 
                             <div key={movie.id}
                                 className="group cursor-pointer relative rounded-lg overflow-hidden h-[440px] w-[230px]">
@@ -94,48 +80,20 @@ const TopRatedMovieList = () => {
                                     <h4 >{movie.original_title} </h4>
                                 </div>
                             </div>
-                            </Link>
-                        ))}
-                    </div>
+                        </Link>
+                    ))}
                 </div>
-                <div>
-                    <div >
-                        <Pagination>
-                            <PaginationContent>
-                                <PaginationItem>
-                                    <PaginationPrevious href="#"
-                                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                                    />
-                                </PaginationItem>
-
-                                <PaginationItem>
-
-                                    {
-                                        [1, 2, 3, 4, 5, 6, 7].map((page) => (
-                                            <PaginationLink key={page} className="border" href="#" onClick={() => handlePageChange(page)}>
-                                                {page}
-                                            </PaginationLink>
-                                        ))
-                                    }
-
-
-
-
-                                </PaginationItem>
-
-                                <PaginationItem>
-                                    <PaginationNext href="#"
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                    />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
-
-                    </div>
-                </div>
-                <Footer />
             </div>
-        </ThemeProvider>
+            <div>
+                <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    handlePageChange={handlePageChange}
+                />
+
+            </div>
+            <Footer />
+        </div>
     )
 }
 
