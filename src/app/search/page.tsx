@@ -25,24 +25,16 @@ type Movie = {
 
 const SearchResult = () => {
 
-    const [searchValue, setSearchValue] = useState("")
+    // const [searchValue, setSearchValue] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
     const [genres, setGenres] = useState<Genres[]>([])
     const router = useRouter()
     const searchParams = useSearchParams()
-
+    const searchValue = searchParams.get('value') || ''
     const selectedGenre = JSON.parse(searchParams.get('genres') || "[]")
     const [filteredGenre, setFilteredGenre] = useState<Movie[]>([])
     const [totalResult, setTotalResult] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
-
-    useEffect(() => {
-        const storedValue = localStorage.getItem("inputValue")
-        if (storedValue) {
-            setSearchValue(storedValue)
-        }
-    }, [searchValue])
-
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page)
@@ -102,9 +94,9 @@ const SearchResult = () => {
             }
         };
         getSearchedAndFilteredMovie();
-    }, [selectedGenre, currentPage, searchValue]);
+    }, [searchParams, currentPage, searchValue]);
 
-    // console.log(filteredGenre)
+    console.log(searchValue)
 
     return (
         <div className="w-screen h-full flex flex-col items-center gap-[30px]">
@@ -143,11 +135,10 @@ const SearchResult = () => {
 
                                     </div>
                                 ))
-
                             }
                         </div>
-
                     </div>
+
                     <div className="w-[30%] h-auto pl-[20px]">
                         <div className="mb-[20px]">
                             <h1 className="text-[26px] font-extrabold">Genres</h1>

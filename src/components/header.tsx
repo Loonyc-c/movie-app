@@ -10,7 +10,7 @@ import ImbdStar from "./icons/imbd-star"
 import { ChevronRight } from "lucide-react"
 import ModeToggle from "./mode-toggle"
 import Link from "next/link"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { fetchSearchedMovie } from "@/app/utils/api"
 import { fetchGenres } from "@/app/utils/api"
 
@@ -45,6 +45,7 @@ export const Header = () => {
     const [genre, setGenre] = useState<Genre[]>([])
     const currentPage = 1
     const pathName = usePathname()
+    const router = useRouter()
 
 
     useEffect(() => {
@@ -55,14 +56,16 @@ export const Header = () => {
         getSearchedMovie()
     }, [searchValue])
 
-    useEffect(() => {
-        const storedValue = localStorage.getItem("inputValue")
-        if (storedValue) setSearchValue(storedValue)
-    }, [])
+    // useEffect(() => {
+    //     const storedValue = localStorage.getItem("inputValue")
+    //     if (storedValue) setSearchValue(storedValue)
+    // }, [])
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
-        localStorage.setItem("inputValue", e.target.value)
+        // localStorage.setItem("inputValue", e.target.value)
+
+        pathName === "/search" && router.push(`/search?value=${e.target.value}`)
     }
 
     const shouldDisplay = searchValue.length > 0 && filteredData.length > 0;
@@ -122,7 +125,6 @@ export const Header = () => {
                     </div>
 
                     {
-
                         pathName !== "/search" && (
                             shouldDisplay && (
                                 <div className=" rounded-lg pt-[10px] pl-[10px] absolute mt-[50px] z-30 flex flex-col w-[600px] h-[] border  bg-white dark:bg-[#09090B]">
@@ -151,7 +153,7 @@ export const Header = () => {
                                         </Link>
                                     ))}
                                     <Link
-                                        href={`/search?`}>
+                                        href={`/search?value=${searchValue}`}>
                                         <p className="my-[20px]">See all result for "{searchValue}"</p>
                                     </Link>
                                 </div>

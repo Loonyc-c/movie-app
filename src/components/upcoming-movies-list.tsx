@@ -37,27 +37,27 @@ export const UpcomingMoviesList = () => {
                 <Link href="/category/upcoming">
                     <Button className="bg-none">
                         See more
-                        <ArrowRight/>
+                        <ArrowRight />
 
                     </Button>
                 </Link>
             </div>
-            <div className="w-[100%] gap-6  grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-5 ">
+            <div className="w-[100%] gap-6  grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 xss:grid-cols-2">
                 {upComingMovies.slice(0, 10).map((movie) => (
                     <Link key={movie.id} href={`/detail/${movie.id}`}>
                         <div
                             key={movie.id}
-                            className="group cursor-pointer rounded-lg overflow-hidden h-[440px]  w-[230px]    relative"
+                            className="group cursor-pointer rounded-lg overflow-hidden h-[440px]  w-[100%]    relative"
                         >
-                            <div className="relative">
+                            <div className="relative w-full h-[80%]">
                                 <img
                                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                                     alt={movie.title}
-                                    className="w-full h-[260px] sm:h-[345px] object-cover"
+                                    className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             </div>
-                            <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[95px] px-[10px] py-[5px]">
+                            <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-[20%] px-[10px] py-[5px]">
                                 <div className="gap-[5px] flex items-center">
                                     <ImbdStar />
                                     <div>
