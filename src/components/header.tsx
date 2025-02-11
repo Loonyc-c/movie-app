@@ -82,7 +82,7 @@ export const Header = () => {
 
 
     return (
-        <div className="bg-white dark:bg-[#09090B] w-screen sticky top-0 z-50 relative flex  justify-center">
+        <div className="bg-white dark:bg-[#09090B] w-screen sticky top-0 z-50  flex  justify-center">
             <div className={` relative w-full max-w-[1280px] mx-auto h-[50px] flex items-center justify-between } `}>
                 <Link href="/">
                     <LogoBlue />
@@ -106,7 +106,7 @@ export const Header = () => {
                                             href={`/genres?page=${currentPage}?genres=${genre.id}`}
                                         >
                                             <div key={genre.id}>
-                                                <Button className="h-[20px] bg-white dark:bg-[#09090B] text-black dark:text-white border rounded rounded-lg"
+                                                <Button className="h-[20px] bg-white dark:bg-[#09090B] text-black dark:text-white border  rounded-lg"
                                                 >
                                                     {genre.name}
                                                     <ChevronRight className="w-[10px] " />
@@ -136,7 +136,7 @@ export const Header = () => {
                                                 <img
                                                     src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                                                     alt={movie.title}
-                                                    className="w-[80px] h-[100px] h-auto object-cover rounded-lg"
+                                                    className="w-[80px] h-[100px] object-cover rounded-lg"
                                                 />
                                                 <div>
                                                     <p className="font-extrabold">{movie.title}</p>

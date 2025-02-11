@@ -118,6 +118,8 @@ const Detailed = () => {
         getMovieCredit()
     }, [id])
 
+    console.log()
+
 
 
     const director = credit?.crew?.find((member: Crew) => member.job === "Director")?.name || "";
@@ -159,9 +161,9 @@ const Detailed = () => {
         <div className="flex flex-col gap-[30px]">
             <div className="w-full h-full flex flex-col gap-[30px] items-center justify-center">
                 <Header />
-                <div className="max-w-screen-xl mx-auto">
-                    <div className="w-full flex flex-col justify-between">
-                        <div className="w-full flex justify-between">
+                <div className="max-w-screen-lg mx-auto flex flex-col gap-[30px]">
+                    <div className="flex flex-col justify-between">
+                        <div className="flex justify-between">
                             <div >
                                 <h1 className="font-extrabold text-[30px]">{movie.original_title}</h1>
                                 <p> {movie.release_date}</p>
@@ -182,15 +184,15 @@ const Detailed = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-between mt-[30px] h-[400px]">
+                        <div className="flex justify-between mt-[30px] w-full h-auto  lg:h-[400px]">
                             <img
                                 src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                className="w-[300px] "
+                                className=" hidden lg:block"
                             />
-                            <div className="relative">
+                            <div className="relative w-[70%] h-full">
                                 <img
                                     src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                                    className="w-[750px] h-full "
+                                    className=" "
                                 />
                                 <div className="absolute inset-0 bg-black/40 p-[20px] flex items-end">
                                     <div className="text-white flex items-center gap-[10px] ">
@@ -208,37 +210,42 @@ const Detailed = () => {
 
                                             <DialogContent className="">
                                                 {
-                                                    <div key={movieTrailer.id} className="w-[500px] h-[400px]" >
+                                                    <div key={movieTrailer?.id} className="w-[500px] h-[400px]" >
                                                         <ReactPlayer
 
-                                                            url={`https://www.youtube.com/watch?v=${movieTrailer.key}`}
+                                                            url={`https://www.youtube.com/watch?v=${movieTrailer?.key}`}
                                                         />
                                                     </div>
                                                 }
                                             </DialogContent>
                                         </Dialog>
-
-
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex w-full h-auto flex-col gap-[20px]">
+                        <div className="flex gap-[20px]">
+                            <img
+                                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                className="w-[100px] h-full object-cover lg:hidden" />
+                            <div className="w-full h-auto">
+                                <div className="flex gap-[10px]"> {
+                                    movie.genres?.map((genre) => (
+                                        <Button className="h-[20px] text-[12px] rounded-xl" key={genre.id}>{genre.name}</Button>
+                                    ))
+                                }
+                                </div>
+                                <div className="w-full h-auto">
+                                    <p className="text-base"> {movie.overview}</p>
 
                                 </div>
-
-
                             </div>
 
                         </div>
-
-                    </div>
-
-                    <div className="w-full flex flex-col gap-[20px]">
-                        <div className="flex gap-[10px]"> {
-                            movie.genres?.map((genre) => (
-                                <Button className="h-[20px] text-[12px] rounded-xl" key={genre.id}>{genre.name}</Button>
-                            ))
-                        }
-                        </div>
-                        <p> {movie.overview}</p>
                         <div className="flex flex-col gap-[0px]">
+
                             <div className="flex gap-[20px] border-b-2 py-[10px]">
                                 <h4 className="font-extrabold">Director</h4>
                                 <span>{director}</span>
@@ -261,18 +268,20 @@ const Detailed = () => {
                     </div>
                     <div className="w-full flex flex-col  gap-[20px] ">
                         <div className="flex justify-between">
-                            <h1 className="font-extrabold text-[30px]" >More like this</h1>
+                            <div className="w-[200px] h-auto">
+                                <h1 className="font-extrabold text-[30px]" >More like this</h1>
+                            </div>
                             <Link key={movie.id} href={`/category/${movie.id}/similar`}>
 
                                 <Button>See more</Button>
                             </Link>
                         </div>
-                        <div className="flex justify-between grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                        <div className=" justify-between grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 xss:grid-cols-2">
                             {
                                 similarMovies.slice(0, 5).map((movie) => (
                                     <Link key={movie.id} href={`/detail/${movie.id}`}>
 
-                                        <div key={movie.id} className="group relative cursor-pointer rounded-lg overflow-hidden w-[195px]">
+                                        <div key={movie.id} className="group relative cursor-pointer rounded-lg overflow-hidden w-[150px] lg:w-[195px]  ">
                                             <div className="relative">
                                                 <img
                                                     src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}

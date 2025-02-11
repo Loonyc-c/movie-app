@@ -108,7 +108,7 @@ const SearchResult = () => {
                 <div className=" flex">
                     <div className="w-[70%] h-full flex flex-col gap-[30px] pr-[20px] border-r-2">
                         <h1 className="font-extrabold text-[20px]">{totalResult} results for "{searchValue}"</h1>
-                        <div className="w-full h-full grid grid-cols-4 flex justify-between">
+                        <div className="w-full h-full grid grid-cols-4 justify-between">
                             {
                                 filteredGenre.map((movie) => (
                                     <div key={movie.id} className="w-[180px] h-[350px] group relative cursor-pointer rounded-lg overflow-hidden mb-[20px] ">

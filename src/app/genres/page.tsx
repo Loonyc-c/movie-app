@@ -113,7 +113,7 @@ const Genres = () => {
 
                         </div>
                     </div>
-                    <div className="h-full w-full  pl-[30px] gap-[20px] flex justify-between grid grid-cols-4">
+                    <div className="h-full w-full  pl-[30px] gap-[20px] justify-between grid grid-cols-4">
                         {
                             filteredGenre.map((movie) => (
                                 <div key={movie.id} className="w-[180px] h-[350px] group relative cursor-pointer rounded-lg overflow-hidden ">

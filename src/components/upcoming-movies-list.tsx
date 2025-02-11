@@ -47,7 +47,7 @@ export const UpcomingMoviesList = () => {
                     <Link key={movie.id} href={`/detail/${movie.id}`}>
                         <div
                             key={movie.id}
-                            className="group cursor-pointer rounded-lg overflow-hidden h-[440px]  w-[100%]    relative"
+                            className="group cursor-pointer rounded-lg overflow-hidden h-[330px] lg:h-[440px]  w-[100%]    relative"
                         >
                             <div className="relative w-full h-[80%]">
                                 <img

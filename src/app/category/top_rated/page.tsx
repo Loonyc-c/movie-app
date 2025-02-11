@@ -49,7 +49,6 @@ const TopRatedMovieList = () => {
 
         <div className="flex flex-col gap-[30px]">
             <Header />
-
             <div className="max-w-screen-xl mx-auto  px-[30px]">
                 <div className="flex justify-between mb-[20px]">
                     <h1 className="text-2xl sm:text-3xl font-extrabold">Top Rated</h1>
