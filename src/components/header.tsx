@@ -83,7 +83,7 @@ export const Header = () => {
 
     return (
         <div className="bg-white dark:bg-[#09090B] w-screen sticky top-0 z-50  flex  justify-center">
-            <div className={` relative w-full max-w-[1280px] mx-auto h-[50px] flex items-center justify-between } `}>
+            <div className={` relative w-full max-w-screen-xl px-[20px] mx-auto h-[50px] flex items-center justify-between } `}>
                 <Link href="/">
                     <LogoBlue />
                 </Link>

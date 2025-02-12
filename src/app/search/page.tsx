@@ -99,64 +99,61 @@ const SearchResult = () => {
     console.log(searchValue)
 
     return (
-        <div className="w-screen h-full flex flex-col items-center gap-[30px]">
+        <div className="flex flex-col gap-[30px] items-center">
             <Header />
-            <div className="w-[1280px] h-full flex flex-col gap-[30px]">
-                <div>
-                    <h1 className="font-extrabold text-[32px]">Search Results</h1>
-                </div>
-                <div className=" flex">
-                    <div className="w-[70%] h-full flex flex-col gap-[30px] pr-[20px] border-r-2">
-                        <h1 className="font-extrabold text-[20px]">{totalResult} results for "{searchValue}"</h1>
-                        <div className="w-full h-full grid grid-cols-4 justify-between">
-                            {
-                                filteredGenre.map((movie) => (
-                                    <div key={movie.id} className="w-[180px] h-[350px] group relative cursor-pointer rounded-lg overflow-hidden mb-[20px] ">
-                                        <div className="relative">
-                                            <img
-                                                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                                alt={movie.title}
-                                                className="w-full h-[150px] sm:h-[250px]"
-                                            />
-                                            <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+            <div className="max-w-screen-xl px-[20px] h-full lg:flex">
+                <div className="lg:w-[70%] w-full h-full  pr-[20px] lg:border-r-2">
+                    <h1 className="font-extrabold text-[32px] mb-[20px]">Search Results</h1>
+                    <h1 className="font-extrabold text-[20px] mb-[20px]">{totalResult} results for "{searchValue}"</h1>
+                    <div className="h-full w-full gap-[20px] justify-between grid xss:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-3 xl:grid-cols-4">
+                        {
+                            filteredGenre.map((movie) => (
+                                <div key={movie.id} className="w-full h-auto group relative cursor-pointer rounded-lg overflow-hidden ">
+                                    <div className="relative">
+                                        <img
+                                            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                            alt={movie.title}
+                                            
+                                        />
+                                        <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
 
-                                        </div>
-                                        <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-full px-[10px] py-[5px]">
-                                            <div className="gap-[5px] flex items-center">
-                                                <ImbdStar />
-                                                <div>
-                                                    <span className="font-bold">{movie.vote_average}</span>
-                                                    <span className="text-[10px]">/10</span>
-                                                </div>
+                                    </div>
+                                    <div className="bg-[#f6f6f6] dark:bg-[#313131] gap-[5px] h-full px-[10px] py-[5px]">
+                                        <div className="gap-[5px] flex items-center">
+                                            <ImbdStar />
+                                            <div>
+                                                <span className="font-bold">{movie.vote_average}</span>
+                                                <span className="text-[10px]">/10</span>
                                             </div>
-
-                                            <h4 >{movie.original_title} </h4>
                                         </div>
 
+                                        <h4 >{movie.original_title} </h4>
                                     </div>
-                                ))
-                            }
-                        </div>
+
+                                </div>
+                            ))
+                        }
+
                     </div>
+                </div>
 
-                    <div className="w-[30%] h-auto pl-[20px]">
-                        <div className="mb-[20px]">
-                            <h1 className="text-[26px] font-extrabold">Genres</h1>
-                            <h4>See lists of movies by genre</h4>
-                        </div>
-                        <div className="w-full h-auto flex flex-wrap gap-[5px] ">
-                            {
-                                genres.map((genre) => (
-                                    <div key={genre.id} onClick={() => handleUpdateParams(genre.id)}>
-                                        <Button className="h-[20px] py-[5px] text-[12px] border rounded-full bg-white dark:bg-[#09090B] text-black dark:text-white ">
-                                            {genre.name}
-                                            <ChevronRight />
-                                        </Button>
-                                    </div>
-                                ))
-                            }
+                <div className="lg:w-[30%] mt-[20px] lg:mt-[0px] lg:sticky lg:top-[120px] h-auto pl-[20px]">
+                    <div className="mb-[20px]">
+                        <h1 className="text-[26px] font-extrabold">Genres</h1>
+                        <h4>See lists of movies by genre</h4>
+                    </div>
+                    <div className="w-full h-auto flex flex-wrap gap-[5px] ">
+                        {
+                            genres.map((genre) => (
+                                <div key={genre.id} onClick={() => handleUpdateParams(genre.id)}>
+                                    <Button className="h-[20px] py-[5px] text-[12px] border rounded-full bg-white dark:bg-[#09090B] text-black dark:text-white ">
+                                        {genre.name}
+                                        <ChevronRight />
+                                    </Button>
+                                </div>
+                            ))
+                        }
 
-                        </div>
                     </div>
                 </div>
             </div>

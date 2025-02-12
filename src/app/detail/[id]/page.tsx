@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { ThemeProvider } from "@/components/theme-provider";
 import BigStar from "@/components/icons/big-star";
 import ImbdStar from "@/components/icons/imbd-star";
 import Link from "next/link";
@@ -24,6 +23,7 @@ import { fetchDetailedMovie } from "@/app/utils/api";
 import { fetchMovieCredit } from "@/app/utils/api";
 import { fetchSimilarMovie } from "@/app/utils/api";
 import { fetchMovieTrailer } from "@/app/utils/api";
+import { ArrowRight } from "lucide-react";
 
 type Movie = {
     poster_path: string
@@ -153,7 +153,7 @@ const Detailed = () => {
         getMovieTrailer()
     }, [id])
 
-    console.log(movieTrailer)
+    console.log(similarMovies)
 
     return (
 
@@ -228,10 +228,10 @@ const Detailed = () => {
                     <div className="flex w-full h-auto flex-col gap-[20px]">
                         <div className="flex gap-[20px]">
                             <img
-                                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                                 className="w-[100px] h-full object-cover lg:hidden" />
                             <div className="w-full h-auto">
-                                <div className="flex gap-[10px]"> {
+                                <div className="flex gap-[10px] mb-[20px]"> {
                                     movie.genres?.map((genre) => (
                                         <Button className="h-[20px] text-[12px] rounded-xl" key={genre.id}>{genre.name}</Button>
                                     ))
@@ -278,7 +278,7 @@ const Detailed = () => {
                         </div>
                         <div className=" justify-between grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 xss:grid-cols-2">
                             {
-                                similarMovies.slice(0, 5).map((movie) => (
+                                similarMovies.length > 0 && similarMovies.slice(0, 5).map((movie) => (
                                     <Link key={movie.id} href={`/detail/${movie.id}`}>
 
                                         <div key={movie.id} className="group relative cursor-pointer rounded-lg overflow-hidden w-[150px] lg:w-[195px]  ">
@@ -302,9 +302,24 @@ const Detailed = () => {
                                         </div>
                                     </Link>
                                 ))
+
                             }
+                        </div>
+                        {similarMovies.length === 0 && <div className="w-full h-[200px] flex flex-col justify-center items-center gap-[10px]">
+
+                            <h1 className="text-[20px] font-medium">No exact matches, but explore similar ones based on what you love! </h1>
+                            <Link href={`/genres`}>
+                                <button className="border flex items-center justify-center rounded-full px-[15px] py-[5px] bg-black dark:bg-white text-white dark:text-black" >
+                                    <h1 className="text-[16px] font-medium">find more</h1>
+                                    <ArrowRight
+                                        className="w-[20px] h-[15px]" />
+                                </button>
+                            </Link>
+
+
 
                         </div>
+                        }
 
                     </div>
                 </div>

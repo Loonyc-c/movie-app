@@ -34,7 +34,7 @@ const Genres = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const selectedGenre = JSON.parse(searchParams.get('genres') || "[]")
-    const [totalPages,setTotalPages] = useState(0)
+    const [totalPages, setTotalPages] = useState(0)
 
     useEffect(() => {
         const getGenres = async () => {
@@ -89,39 +89,38 @@ const Genres = () => {
     return (
         <div className="flex flex-col gap-[30px] items-center">
             <Header />
-            <div className="w-[1280px] h-full flex flex-col gap-[20px]">
-                <div className="">
-                    <h1 className="font-extrabold text-[30px]">Search Filter</h1>
-                </div>
-                <div className="w-full h-full flex  ">
-                    <div className="h-screen w-[40%] border-r-2 pr-[20px] flex flex-col gap-[20px]">
-                        <div>
-                            <h1 className="text-[26px] font-extrabold">Genres</h1>
-                            <h4>See lists of movies by genre</h4>
-                        </div>
-                        <div className="w-full h-[200px] flex flex-wrap gap-[5px] ">
-                            {
-                                genres.map((genre) => (
-                                    <div key={genre.id} onClick={() => handleUpdateParams(genre.id)}>
-                                        <Button className="h-[20px] py-[5px] text-[12px] border rounded-full bg-white dark:bg-[#09090B] text-black dark:text-white ">
-                                            {genre.name}
-                                            <ChevronRight />
-                                        </Button>
-                                    </div>
-                                ))
-                            }
-
+            <div className="max-w-screen-xl h-full lg:flex px-[20px] ">
+                    <div className="lg:w-[30%] w-full h-auto lg:border-r-2 ">
+                        <h1 className="font-extrabold text-[30px]">Search Filter</h1>
+                        <div className=" pr-[20px] lg:sticky lg:top-[120px] flex flex-col gap-[20px]">
+                            <div>
+                                <h1 className="text-[26px] font-extrabold">Genres</h1>
+                                <h4>See lists of movies by genre</h4>
+                            </div>
+                            <div className="lg:h-[200px] mb-[30px] flex flex-wrap gap-[10px] ">
+                                {
+                                    genres.map((genre) => (
+                                        <div key={genre.id} onClick={() => handleUpdateParams(genre.id)}>
+                                            <Button className="h-[20px] py-[5px] text-[12px] border rounded-full bg-white dark:bg-[#09090B] text-black dark:text-white ">
+                                                {genre.name}
+                                                <ChevronRight />
+                                            </Button>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
-                    <div className="h-full w-full  pl-[30px] gap-[20px] justify-between grid grid-cols-4">
+
+                    <div className="h-full w-full lg:w-[70%] lg:pl-[30px] gap-[20px] justify-between grid xss:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-3 xl:grid-cols-4">
                         {
                             filteredGenre.map((movie) => (
-                                <div key={movie.id} className="w-[180px] h-[350px] group relative cursor-pointer rounded-lg overflow-hidden ">
+                                <div key={movie.id} className="w-full h-auto group relative cursor-pointer rounded-lg overflow-hidden ">
                                     <div className="relative">
                                         <img
                                             src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
                                             alt={movie.title}
-                                            className="w-full h-[150px] sm:h-[250px]"
+                                            
                                         />
                                         <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
 
@@ -145,7 +144,6 @@ const Genres = () => {
                     </div>
                 </div>
 
-            </div>
             <PaginationComponent
                 currentPage={currentPage}
                 totalPages={totalPages}
